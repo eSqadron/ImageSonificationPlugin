@@ -14,8 +14,14 @@
 /**
 */
 enum SythesiserAlgorithm {
-    Noise,
-    EECS_simplified
+    NoiseCrawler,
+    SineChordCrawler
+};
+
+enum CrawlingDirection {
+    LeftToRight,
+    UpToDown,
+    Random
 };
 
 
@@ -70,10 +76,8 @@ public:
     std::unique_ptr<juce::Image::BitmapData> imageBitmapPtr;
     juce::Image image;
 
-    std::atomic < SythesiserAlgorithm>* algorithm = nullptr;
-
-
-    std::atomic < float>* algorithmParam = nullptr;
+    std::atomic < float >* algorithmParam = nullptr;
+    std::atomic < float >* crawlingDirectionParam = nullptr;
 
 private:
     juce::AudioProcessorValueTreeState parameters;

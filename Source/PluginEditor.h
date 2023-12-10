@@ -11,10 +11,12 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 
+
+template <typename T>
 struct ToggleButtonInfo {
-    ToggleButtonInfo(std::string name, SythesiserAlgorithm alg, juce::ToggleButton* button) : name(name), alg(alg), button(button) { }
+    ToggleButtonInfo(std::string name, T alg, juce::ToggleButton* button) : name(name), alg(alg), button(button) { }
     std::string name;
-    SythesiserAlgorithm alg;
+    T alg;
     juce::ToggleButton* button;
 
     ToggleButtonInfo(const ToggleButtonInfo& other) {
@@ -46,9 +48,19 @@ private:
     juce::ToggleButton noiseToggle;
     juce::ToggleButton toggleEECS;
 
-    ToggleButtonInfo buttons[2] = {
-        { "Image as noise", Noise, &noiseToggle},
-        { "EECS 351 WN22", EECS_simplified, &toggleEECS}
+    juce::ToggleButton Crawl1Toggle;
+    juce::ToggleButton Crawl2Toggle;
+    juce::ToggleButton Crawl3Toggle;
+
+    ToggleButtonInfo<enum CrawlingDirection> crawl_direction_buttons[3] = {
+        { "From left to right", LeftToRight, &Crawl1Toggle},
+        { "From up to down", UpToDown, &Crawl2Toggle},
+        { "random", Random, &Crawl3Toggle}
+    };
+
+    ToggleButtonInfo<enum SythesiserAlgorithm> buttons[2] = {
+        { "Image as noise", NoiseCrawler, &noiseToggle},
+        { "EECS 351 WN22", SineChordCrawler, &toggleEECS}
     };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ImageSonificationProcessorEditor)

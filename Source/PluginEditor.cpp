@@ -11,23 +11,10 @@
 
 enum RadioButtonIds
 {
-    SynthAlgorithmID = 1001
+    SynthAlgorithmID = 1001,
+    CrawlingDirection = 1002
 };
 
-//class ToggleButtonWrapper {
-//public:
-//    ToggleButtonWrapper(std::string name, SythesiserAlgorithm algNum, ImageAudialisationAudioProcessor& processor) {
-//        Button.setRadioGroupId(SynthAlgorithmID);
-//        Button.onClick = [this, processor]() {
-//            *processor.algorithmParam = static_cast<float>(Noise);
-//            };
-//        Button.setToggleState(*processor.algorithmParam == static_cast<float>(Noise), juce::NotificationType::dontSendNotification);
-//        Button.setButtonText("Image as noise");
-//    }
-//
-//private:
-//    juce::ToggleButton Button;
-//};
 
 //==============================================================================
 ImageSonificationProcessorEditor::ImageSonificationProcessorEditor(ImageSonificationProcessor& p)
@@ -37,39 +24,34 @@ ImageSonificationProcessorEditor::ImageSonificationProcessorEditor(ImageSonifica
     // editor's size to whatever you need it to be.
 
     
-
+    // BUTTONS FOR ALGORITHM CHOOSING
     for (auto button: buttons) {
         button.button->setRadioGroupId(SynthAlgorithmID);
         auto alg = button.alg;
         button.button->onClick = [this, alg]() {
             *audioProcessor.algorithmParam = static_cast<float>(alg);
-            };
+        };
+
         button.button->setToggleState(*audioProcessor.algorithmParam == static_cast<float>(alg), juce::NotificationType::dontSendNotification);
         button.button->setButtonText(button.name);
         addAndMakeVisible(button.button);
     }
 
-    /*noiseToggle.setRadioGroupId(SynthAlgorithmID);
-    noiseToggle.onClick = [this]() {
-        *audioProcessor.algorithmParam = static_cast<float>(Noise);
-    };
-    noiseToggle.setToggleState(*audioProcessor.algorithmParam == static_cast<float>(Noise), juce::NotificationType::dontSendNotification);
-    noiseToggle.setButtonText("Image as noise");*/
-    
 
-    //toggle2.setRadioGroupId(SynthAlgorithmID);
-    //toggle2.onClick = [this]() {
-    //    *audioProcessor.algorithmParam = static_cast<float>(alg2);
-    //};
-    //toggle2.setToggleState(*audioProcessor.algorithmParam == static_cast<float>(alg2), juce::NotificationType::dontSendNotification);
-    //noiseToggle.setButtonText("Algorithm 2");
+    // IMAGE FOR CRAWLING DIRECTIONS
+    for (auto button : crawl_direction_buttons) {
+        button.button->setRadioGroupId(CrawlingDirection);
+        auto dir = button.alg;
+        button.button->onClick = [this, dir]() {
+            *audioProcessor.crawlingDirectionParam = static_cast<float>(dir);
+        };
 
+        button.button->setToggleState(*audioProcessor.crawlingDirectionParam == static_cast<float>(dir), juce::NotificationType::dontSendNotification);
+        button.button->setButtonText(button.name);
+        addAndMakeVisible(button.button);
+    }
 
-    //addAndMakeVisible(&noiseToggle);
-    //addAndMakeVisible(&toggle2);
-
-    setSize(500, 400);
-    //imagePathText.setEditable(true);
+    // IMAGE DISPLAY
     imagePathText.onTextChange = [this] {
         auto tempImage = juce::JPEGImageFormat::loadFrom(juce::File::File(imagePathText.getText()));
         if (tempImage.isValid()) {
@@ -90,8 +72,9 @@ ImageSonificationProcessorEditor::ImageSonificationProcessorEditor(ImageSonifica
     }
 
     addAndMakeVisible(imagePathText);
-
     addAndMakeVisible(&imageComponent);
+
+    setSize(800, 700);
 }
 
 ImageSonificationProcessorEditor::~ImageSonificationProcessorEditor()
@@ -113,14 +96,17 @@ void ImageSonificationProcessorEditor::resized()
 {
     imagePathText.setBounds(10, 10, getWidth() - 20, 20);
 
-    int it = 40;
+    int it = 170;
+    for (auto button : crawl_direction_buttons) {
+        button.button->setBounds(it, 40, 150, 25);
+        it += 150;
+    }
+
+    it = 40;
     for (auto button : buttons) {
-        button.button->setBounds(10, it, 60, 25);
+        button.button->setBounds(10, it, 150, 25);
         it += 25;
     }
 
-    /*noiseToggle.setBounds(10, 40, 60, 25);
-    toggle2.setBounds(10, 65, 60, 25);*/
-
-    imageComponent.setBounds(10, 90, getWidth() - 20, getHeight() - 100);
+    imageComponent.setBounds(10, getHeight()-425, getWidth() - 20, 400);
 }

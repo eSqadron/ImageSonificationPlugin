@@ -25,6 +25,11 @@ ImageSonificationProcessor::ImageSonificationProcessor()
                                                          "Algorithm",            // parameter name
                                                          0,              // minimum value
                                                          100,              // maximum value
+                                                         0),            // default value
+            std::make_unique<juce::AudioParameterInt>("crawling_direction",            // parameterID
+                                                         "CrawlingDirection",            // parameter name
+                                                         0,              // minimum value
+                                                         100,              // maximum value
                                                          0)            // default value
         })
 #endif
@@ -33,6 +38,7 @@ ImageSonificationProcessor::ImageSonificationProcessor()
     m_flogger = std::unique_ptr<juce::FileLogger>(juce::FileLogger::createDateStampedLogger("Juce", "visualiser", ".txt", "Welcome to plugin"));
 
     algorithmParam = parameters.getRawParameterValue("algorithm");
+    crawlingDirectionParam = parameters.getRawParameterValue("crawling_direction");
 }
 
 ImageSonificationProcessor::~ImageSonificationProcessor()
@@ -179,13 +185,13 @@ void ImageSonificationProcessor::processBlock(juce::AudioBuffer<float>& buffer, 
 
         auto pix_c = imageBitmapPtr->getPixelColour(widthIt, heightIt);
 
-        if (*algorithmParam == static_cast<float>(Noise)) {
+        if (*algorithmParam == static_cast<float>(NoiseCrawler)) {
             *i = (pix_c.getFloatRed() + pix_c.getFloatGreen() + pix_c.getFloatBlue()) / 3.f;
         }
 
 
 
-        if (*algorithmParam == static_cast<float>(EECS_simplified)) { //https://sites.google.com/umich.edu/eecs351-project-sonify/how-we-sonify?authuser=0
+        if (*algorithmParam == static_cast<float>(SineChordCrawler)) { //https://sites.google.com/umich.edu/eecs351-project-sonify/how-we-sonify?authuser=0
             float currentSample = 0;
             for (short unsigned int j = 0; j < 3; j++) {
                 currentSample += (float)std::sin(currentAngle[j]);
@@ -200,7 +206,7 @@ void ImageSonificationProcessor::processBlock(juce::AudioBuffer<float>& buffer, 
         // ITERATORS
         EECS_it++;
 
-        if (*algorithmParam == static_cast<float>(EECS_simplified) && EECS_it >= 15000) {
+        if (*algorithmParam == static_cast<float>(SineChordCrawler) && EECS_it >= 15000) {
             EECS_it = 0;
             short unsigned int randomInt = juce::Random::getSystemRandom().nextInt(4);
             if (widthIt < imageWidth-1 && randomInt == 0) {
@@ -216,7 +222,7 @@ void ImageSonificationProcessor::processBlock(juce::AudioBuffer<float>& buffer, 
                 heightIt -= 1;
             }
 
-            if (*algorithmParam == static_cast<float>(EECS_simplified)) { //https://sites.google.com/umich.edu/eecs351-project-sonify/how-we-sonify?authuser=0
+            if (*algorithmParam == static_cast<float>(SineChordCrawler)) { //https://sites.google.com/umich.edu/eecs351-project-sonify/how-we-sonify?authuser=0
                 short unsigned int r = pix_c.getRed();
                 short unsigned int g = pix_c.getGreen();
                 short unsigned int b = pix_c.getBlue();
@@ -262,7 +268,7 @@ void ImageSonificationProcessor::processBlock(juce::AudioBuffer<float>& buffer, 
 
 
         // Go from left to right in rows
-        if (*algorithmParam == static_cast<float>(Noise)) {
+        if (*algorithmParam == static_cast<float>(NoiseCrawler)) {
             widthIt += 1;
             if (widthIt >= imageWidth) {
                 widthIt = 0;
