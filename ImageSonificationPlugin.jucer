@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="DmKkxU" name="ImageSonificationPlugin" projectType="audioplug"
               useAppConfig="0" addUsingNamespaceToJuceHeader="0" displaySplashScreen="1"
-              jucerFormatVersion="1">
+              jucerFormatVersion="1" pluginFormats="buildVST3">
   <MAINGROUP id="tIElxY" name="ImageSonificationPlugin">
     <GROUP id="{FD711F5C-72BD-F3A2-E139-1339E676D35A}" name="Source">
       <FILE id="wS7DDe" name="PluginProcessor.cpp" compile="1" resource="0"
