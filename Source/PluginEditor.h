@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "CommonTypeDefs.h"
 
 
 template <typename T>

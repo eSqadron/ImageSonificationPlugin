@@ -38,7 +38,7 @@ ImageSonificationProcessorEditor::ImageSonificationProcessorEditor(ImageSonifica
     }
 
 
-    // IMAGE FOR CRAWLING DIRECTIONS
+    // BUTTONS FOR CRAWLING DIRECTIONS
     for (auto button : crawl_direction_buttons) {
         button.button->setRadioGroupId(CrawlingDirection);
         auto dir = button.alg;
@@ -55,12 +55,12 @@ ImageSonificationProcessorEditor::ImageSonificationProcessorEditor(ImageSonifica
     imagePathText.onTextChange = [this] {
         auto tempImage = juce::JPEGImageFormat::loadFrom(juce::File::File(imagePathText.getText()));
         if (tempImage.isValid()) {
-            audioProcessor.imageBitmapPtr.reset(nullptr);
+            audioProcessor.imageIsBeingLoaded = true;
             audioProcessor.image = tempImage;
+            audioProcessor.resetBitmap();
             imageComponent.setImage(audioProcessor.image);
-            auto temp = juce::Image::BitmapData(audioProcessor.image, juce::Image::BitmapData::readOnly);
-            audioProcessor.resetImageData(temp.width, temp.height);
-            audioProcessor.imageBitmapPtr.reset(new juce::Image::BitmapData(audioProcessor.image, juce::Image::BitmapData::readOnly));
+            audioProcessor.resetBitmap();
+            audioProcessor.imageIsBeingLoaded = false;
         }
     };
 

@@ -7,6 +7,7 @@
 */
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "CommonTypeDefs.h"
 
 //==============================================================================
 ImageSonificationProcessor::ImageSonificationProcessor()
@@ -31,10 +32,12 @@ ImageSonificationProcessor::ImageSonificationProcessor()
                                                          0,              // minimum value
                                                          100,              // maximum value
                                                          0)            // default value
-        })
+        }),
+    imageAsNoiseAlg(widthIt, heightIt, imageBitmapPtr),
+    eecs351wn22Alg(widthIt, heightIt, imageBitmapPtr)
 #endif
 {
-    imageBitmapPtr.reset(nullptr);
+    imageBitmapPtr.reset();
     m_flogger = std::unique_ptr<juce::FileLogger>(juce::FileLogger::createDateStampedLogger("Juce", "visualiser", ".txt", "Welcome to plugin"));
 
     algorithmParam = parameters.getRawParameterValue("algorithm");
@@ -43,7 +46,7 @@ ImageSonificationProcessor::ImageSonificationProcessor()
 
 ImageSonificationProcessor::~ImageSonificationProcessor()
 {
-    imageBitmapPtr.reset(nullptr);
+    imageBitmapPtr.reset();
 }
 
 //==============================================================================
@@ -111,7 +114,7 @@ void ImageSonificationProcessor::changeProgramName(int index, const juce::String
 //==============================================================================
 void ImageSonificationProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
-    currentSampleRate = sampleRate;
+    this->eecs351wn22Alg.prepareToPlay(sampleRate, samplesPerBlock);
 }
 
 void ImageSonificationProcessor::releaseResources()
@@ -163,129 +166,27 @@ void ImageSonificationProcessor::processBlock(juce::AudioBuffer<float>& buffer, 
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear(i, 0, buffer.getNumSamples());
 
-    if (imageBitmapPtr == nullptr) {
+    // Do NOT play anythong when image is~not loaded or being loaded!
+    if (imageBitmapPtr == nullptr || imageIsBeingLoaded) {
         return;
     }
 
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
+    // mono sine - for mono signal generation
+    float* mono_signal = new float[sample_len];
 
-    float* mono_sine = new float[sample_len];
-
-    for (float* i = mono_sine; i < mono_sine + sample_len; ++i) {
-        //if (m_flogger) {
-        //    std::stringstream s;
-        //    s << pixel.R << " " << pixel.G << " " << pixel.B;
-        //    m_flogger->logMessage(s.str());
-        //}
-
-        auto pix_c = imageBitmapPtr->getPixelColour(widthIt, heightIt);
-
-        if (*algorithmParam == static_cast<float>(NoiseCrawler)) {
-            *i = (pix_c.getFloatRed() + pix_c.getFloatGreen() + pix_c.getFloatBlue()) / 3.f;
-        }
-
-
-
-        if (*algorithmParam == static_cast<float>(SineChordCrawler)) { //https://sites.google.com/umich.edu/eecs351-project-sonify/how-we-sonify?authuser=0
-            float currentSample = 0;
-            for (short unsigned int j = 0; j < 3; j++) {
-                currentSample += (float)std::sin(currentAngle[j]);
-                currentAngle[j] += angleDelta[j];
-            }
-
-            float t = (float)std::sin(currentAngle[0]);
-            *i = currentSample/3;
-
-        }
-
-        // ITERATORS
-        EECS_it++;
-
-        if (*algorithmParam == static_cast<float>(SineChordCrawler) && EECS_it >= 15000) {
-            EECS_it = 0;
-            short unsigned int randomInt = juce::Random::getSystemRandom().nextInt(4);
-            if (widthIt < imageWidth-1 && randomInt == 0) {
-                widthIt += 1;
-            }
-            if (heightIt < imageHeight-1 && randomInt == 1) {
-                heightIt += 1;
-            }
-            if (widthIt > 1 && randomInt == 2) {
-                widthIt -= 1;
-            }
-            if (heightIt > 1 && randomInt == 3) {
-                heightIt -= 1;
-            }
-
-            if (*algorithmParam == static_cast<float>(SineChordCrawler)) { //https://sites.google.com/umich.edu/eecs351-project-sonify/how-we-sonify?authuser=0
-                short unsigned int r = pix_c.getRed();
-                short unsigned int g = pix_c.getGreen();
-                short unsigned int b = pix_c.getBlue();
-                if (r < EECS_limit && g < EECS_limit && b < EECS_limit) {
-                    chords[0] = 64;
-                    chords[1] = 67;
-                    chords[1] = 71;
-                }
-                else if (r > 255 - EECS_limit && g > 255 - EECS_limit && b > 255 - EECS_limit) {
-                    chords[0] = 62;
-                    chords[1] = 65;
-                    chords[1] = 69;
-                }
-                else if (g >= b && g >= r) {
-                    chords[0] = 69;
-                    chords[1] = 72;
-                    chords[1] = 66;
-                }
-                else if (b >= g && b >= r) {
-                    chords[0] = 65;
-                    chords[1] = 68;
-                    chords[1] = 72;
-                }
-                else if (r >= g && r >= b) {
-                    chords[0] = 60;
-                    chords[1] = 64;
-                    chords[1] = 67;
-                }
-                else {
-                    chords[0] = 60;
-                    chords[1] = 64;
-                    chords[1] = 67;
-                }
-
-                for (unsigned short int j = 0; j < 3; j++) {
-                    double chords_hertz = 440.0 * pow(2.0, ((chords[j] - 69) * 1.0) / 12.0);
-                    double chords_cyclesPerSample = chords_hertz / currentSampleRate;
-                    angleDelta[j] = chords_cyclesPerSample * 2.0 * juce::MathConstants<double>::pi;
-                }
-
-            }
-        }
-
-
-        // Go from left to right in rows
-        if (*algorithmParam == static_cast<float>(NoiseCrawler)) {
-            widthIt += 1;
-            if (widthIt >= imageWidth) {
-                widthIt = 0;
-                heightIt += 1;
-
-                if (heightIt >= imageHeight) {
-                    heightIt = 0;
-                }
-            }
-        }
+    // Depending on chosen algorithm, generate new buffer of samples
+    if (*algorithmParam == static_cast<float>(NoiseCrawler)) {
+        imageAsNoiseAlg.generate_next_samples(mono_signal, sample_len);
+    }
+    if (*algorithmParam == static_cast<float>(SineChordCrawler)) { //https://sites.google.com/umich.edu/eecs351-project-sonify/how-we-sonify?authuser=0
+        this->eecs351wn22Alg.generate_next_samples(mono_signal, sample_len);
     }
 
-
+    // rewrite mono signal into all (both) channels
     for (int channel = 0; channel < totalNumInputChannels; ++channel) {
         auto* channelData = buffer.getWritePointer(channel);
         for (int i = 0; i < sample_len; ++i) {
-            channelData[i] = mono_sine[i];
+            channelData[i] = mono_signal[i];
         }
         
     }
@@ -319,12 +220,13 @@ void ImageSonificationProcessor::setStateInformation(const void* data, int sizeI
             parameters.replaceState(juce::ValueTree::fromXml(*xmlState));
 }
 
-void ImageSonificationProcessor::resetImageData(unsigned int image_width, unsigned int image_height)
+
+void ImageSonificationProcessor::resetBitmap()
 {
-    imageWidth = image_width;
-    imageHeight = image_height;
-    heightIt = 0;
-    widthIt = 0;
+    this->imageBitmapPtr.reset(new juce::Image::BitmapData(this->image, juce::Image::BitmapData::readOnly));
+
+    this->imageAsNoiseAlg.imageBitmapPtr = this->imageBitmapPtr;
+    this->eecs351wn22Alg.imageBitmapPtr = this->imageBitmapPtr;
 }
 
 //==============================================================================

@@ -9,21 +9,12 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "ImageAsNoiseAlgorithm.h"
+#include "EECS351WN22algorithm.h"
 
 //==============================================================================
 /**
 */
-enum SythesiserAlgorithm {
-    NoiseCrawler,
-    SineChordCrawler
-};
-
-enum CrawlingDirection {
-    LeftToRight,
-    UpToDown,
-    Random
-};
-
 
 
 class ImageSonificationProcessor : public juce::AudioProcessor
@@ -69,32 +60,27 @@ public:
     void getStateInformation(juce::MemoryBlock& destData) override;
     void setStateInformation(const void* data, int sizeInBytes) override;
 
-    void resetImageData(unsigned int image_width, unsigned int image_height);
+    void resetBitmap();
 
     std::unique_ptr<juce::FileLogger> m_flogger;
 
-    std::unique_ptr<juce::Image::BitmapData> imageBitmapPtr;
+    std::shared_ptr<juce::Image::BitmapData> imageBitmapPtr;
     juce::Image image;
 
-    std::atomic < float >* algorithmParam = nullptr;
-    std::atomic < float >* crawlingDirectionParam = nullptr;
+    std::atomic <float>* algorithmParam = nullptr;
+    std::atomic <float>* crawlingDirectionParam = nullptr;
+
+    bool imageIsBeingLoaded = true;
 
 private:
     juce::AudioProcessorValueTreeState parameters;
 
-    unsigned int imageWidth = 0;
-    unsigned int imageHeight = 0;
-    short unsigned int EECS_it = 0;
-    short unsigned int EECS_limit = 35;
-
     unsigned int widthIt = 0;
     unsigned int heightIt = 0;
 
-    double currentSampleRate = 0.0;
-
-    short unsigned int chords[3] = { 36, 40, 43 };
-    double angleDelta[3] = { 0, 0, 0 };
-    double currentAngle[3] = { 0, 0, 0 };
+    //
+    ImageAsNoiseAlgorithm imageAsNoiseAlg;
+    EECS351WN22algorithm eecs351wn22Alg;
 
 
     //==============================================================================

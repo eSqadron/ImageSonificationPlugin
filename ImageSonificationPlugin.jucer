@@ -5,6 +5,18 @@
               jucerFormatVersion="1" pluginFormats="buildVST3">
   <MAINGROUP id="tIElxY" name="ImageSonificationPlugin">
     <GROUP id="{FD711F5C-72BD-F3A2-E139-1339E676D35A}" name="Source">
+      <GROUP id="{76012BD6-BCB9-B2DF-3807-C613F131C857}" name="Algorithms">
+        <FILE id="BL7Zxc" name="EECS351WN22algorithm.cpp" compile="1" resource="0"
+              file="Source/EECS351WN22algorithm.cpp"/>
+        <FILE id="ctuvXT" name="EECS351WN22algorithm.h" compile="0" resource="0"
+              file="Source/EECS351WN22algorithm.h"/>
+        <FILE id="wEzKu7" name="ImageAsNoiseAlgorithm.cpp" compile="1" resource="0"
+              file="Source/ImageAsNoiseAlgorithm.cpp"/>
+        <FILE id="zgzE9K" name="ImageAsNoiseAlgorithm.h" compile="0" resource="0"
+              file="Source/ImageAsNoiseAlgorithm.h"/>
+      </GROUP>
+      <FILE id="PXG3L7" name="CommonTypeDefs.h" compile="0" resource="0"
+            file="Source/CommonTypeDefs.h"/>
       <FILE id="wS7DDe" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="CwZszY" name="PluginProcessor.h" compile="0" resource="0"
