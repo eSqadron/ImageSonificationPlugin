@@ -16,12 +16,18 @@ enum RadioButtonIds
 };
 
 
+
+
+
+
 //==============================================================================
 ImageSonificationProcessorEditor::ImageSonificationProcessorEditor(ImageSonificationProcessor& p)
     : AudioProcessorEditor(&p), audioProcessor(p)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
+
+    windowSize.addListener (this);
 
     
     // BUTTONS FOR ALGORITHM CHOOSING
@@ -53,7 +59,7 @@ ImageSonificationProcessorEditor::ImageSonificationProcessorEditor(ImageSonifica
 
     // IMAGE DISPLAY
     imagePathText.onTextChange = [this] {
-        auto tempImage = juce::JPEGImageFormat::loadFrom(juce::File::File(imagePathText.getText()));
+        auto tempImage = juce::JPEGImageFormat::loadFrom(juce::File(imagePathText.getText()));
         if (tempImage.isValid()) {
             audioProcessor.imageIsBeingLoaded = true;
             audioProcessor.image = tempImage;
@@ -65,7 +71,7 @@ ImageSonificationProcessorEditor::ImageSonificationProcessorEditor(ImageSonifica
     };
 
     if (audioProcessor.imageBitmapPtr == nullptr) {
-        imagePathText.setText("C:/Users/OEM/Documents/wtyczki/ImageAudialisation/Jan_Matejko_Stanczyk.jpg");
+        imagePathText.setText("/Users/karolinaplaneta/Downloads/_DSC5053.jpg");
     }
     else {
         imageComponent.setImage(audioProcessor.image);
@@ -75,12 +81,36 @@ ImageSonificationProcessorEditor::ImageSonificationProcessorEditor(ImageSonifica
     addAndMakeVisible(&imageComponent);
 
     setSize(800, 700);
+    
+    windowSize.setSliderStyle (juce::Slider::LinearBar);
+    windowSize.setRange(1, 100, 1); // Zakres od 1 do 100 z krokiem 1
+    windowSize.setTextBoxStyle (juce::Slider::TextBoxAbove, false, 90, 0);
+    windowSize.setPopupDisplayEnabled (true, false, this);
+//    windowSize.setTextValueSuffix ("Window size");
+    windowSize.setValue(1);
+//    windowSize.setTitle("Set window size as percent of image size(only for windowing algorithm)");
+    windowSize.setTextValueSuffix("Set window size as percent of image size(only for windowing algorithm)");
+    // MOD 4 dodanie suwaka do edytora
+    addAndMakeVisible (&windowSize);
+    
 }
+
+
+
+
+
 
 ImageSonificationProcessorEditor::~ImageSonificationProcessorEditor()
 {
 
 }
+
+// MOD 13 definicja funkcji do obslugi
+void ImageSonificationProcessorEditor::sliderValueChanged(juce::Slider* slider)
+{
+audioProcessor.valueOfSlider = windowSize.getValue();
+}
+
 
 //==============================================================================
 void ImageSonificationProcessorEditor::paint(juce::Graphics& g)
@@ -94,6 +124,8 @@ void ImageSonificationProcessorEditor::paint(juce::Graphics& g)
 
 void ImageSonificationProcessorEditor::resized()
 {
+    
+    
     imagePathText.setBounds(10, 10, getWidth() - 20, 20);
 
     int it = 170;
@@ -109,4 +141,6 @@ void ImageSonificationProcessorEditor::resized()
     }
 
     imageComponent.setBounds(10, getHeight()-425, getWidth() - 20, 400);
+    
+    windowSize.setBounds (40, 110, getWidth()-60, 20);
 }

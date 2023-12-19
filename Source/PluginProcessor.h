@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include "ImageAsNoiseAlgorithm.h"
 #include "EECS351WN22algorithm.h"
+#include "WindowingAlgorithm.h"
 
 //==============================================================================
 /**
@@ -71,6 +72,8 @@ public:
     std::atomic <float>* crawlingDirectionParam = nullptr;
 
     bool imageIsBeingLoaded = true;
+    
+    int valueOfSlider = 1;
 
 private:
     juce::AudioProcessorValueTreeState parameters;
@@ -81,8 +84,11 @@ private:
     //
     ImageAsNoiseAlgorithm imageAsNoiseAlg;
     EECS351WN22algorithm eecs351wn22Alg;
+    WindowingAlgorithm windowingAlg;
+
 
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ImageSonificationProcessor)
 };
+
