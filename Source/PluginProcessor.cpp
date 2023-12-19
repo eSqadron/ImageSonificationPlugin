@@ -34,7 +34,9 @@ ImageSonificationProcessor::ImageSonificationProcessor()
                                                          0)            // default value
         }),
     imageAsNoiseAlg(widthIt, heightIt, imageBitmapPtr),
-    eecs351wn22Alg(widthIt, heightIt, imageBitmapPtr)
+    eecs351wn22Alg(widthIt, heightIt, imageBitmapPtr),
+    windowingAlg(widthIt, heightIt, imageBitmapPtr)
+
 #endif
 {
     imageBitmapPtr.reset();
@@ -178,7 +180,24 @@ void ImageSonificationProcessor::processBlock(juce::AudioBuffer<float>& buffer, 
     if (*algorithmParam == static_cast<float>(NoiseCrawler)) {
         imageAsNoiseAlg.generate_next_samples(mono_signal, sample_len);
     }
-    if (*algorithmParam == static_cast<float>(SineChordCrawler)) { //https://sites.google.com/umich.edu/eecs351-project-sonify/how-we-sonify?authuser=0
+    
+    
+    
+    
+    
+    
+    else if (*algorithmParam == static_cast<float>(Windowing)) {
+        windowingAlg.generate_next_samples(mono_signal, sample_len, valueOfSlider);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    else if (*algorithmParam == static_cast<float>(SineChordCrawler)) { //https://sites.google.com/umich.edu/eecs351-project-sonify/how-we-sonify?authuser=0
         this->eecs351wn22Alg.generate_next_samples(mono_signal, sample_len);
     }
 
@@ -227,6 +246,8 @@ void ImageSonificationProcessor::resetBitmap()
 
     this->imageAsNoiseAlg.imageBitmapPtr = this->imageBitmapPtr;
     this->eecs351wn22Alg.imageBitmapPtr = this->imageBitmapPtr;
+    this->windowingAlg.imageBitmapPtr = this->imageBitmapPtr;
+
 }
 
 //==============================================================================
