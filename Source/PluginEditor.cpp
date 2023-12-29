@@ -67,11 +67,15 @@ ImageSonificationProcessorEditor::ImageSonificationProcessorEditor(ImageSonifica
             imageComponent.setImage(audioProcessor.image);
             audioProcessor.resetBitmap();
             audioProcessor.imageIsBeingLoaded = false;
+            
+            int newSliderMaxValue = (audioProcessor.imageBitmapPtr->height > audioProcessor.imageBitmapPtr->width) ? audioProcessor.imageBitmapPtr->width : audioProcessor.imageBitmapPtr->height;
+            
+            windowSize.setRange(1, newSliderMaxValue, 1);
         }
     };
 
     if (audioProcessor.imageBitmapPtr == nullptr) {
-        imagePathText.setText("/Users/karolinaplaneta/Downloads/_DSC5053.jpg");
+        imagePathText.setText("Enter path to image");
     }
     else {
         imageComponent.setImage(audioProcessor.image);
@@ -89,7 +93,7 @@ ImageSonificationProcessorEditor::ImageSonificationProcessorEditor(ImageSonifica
 //    windowSize.setTextValueSuffix ("Window size");
     windowSize.setValue(1);
 //    windowSize.setTitle("Set window size as percent of image size(only for windowing algorithm)");
-    windowSize.setTextValueSuffix("Set window size as percent of image size(only for windowing algorithm)");
+    windowSize.setTextValueSuffix(": is the current window size (only for windowing algorithm)");
     // MOD 4 dodanie suwaka do edytora
     addAndMakeVisible (&windowSize);
     
