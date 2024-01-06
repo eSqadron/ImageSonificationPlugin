@@ -12,7 +12,7 @@
 enum RadioButtonIds
 {
     SynthAlgorithmID = 1001,
-    CrawlingDirection = 1002
+    CrawlingDirection = 1002,
 };
 
 

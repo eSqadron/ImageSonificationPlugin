@@ -1,4 +1,4 @@
-/*
+﻿/*
   ==============================================================================
 
     This file contains the basic framework code for a JUCE plugin processor.
@@ -42,6 +42,9 @@ ImageSonificationProcessor::ImageSonificationProcessor()
 
     algorithmParam = parameters.getRawParameterValue("algorithm");
     crawlingDirectionParam = parameters.getRawParameterValue("crawling_direction");
+
+    additiveCollumnIt = 0;
+    additiveSampleIt = 0;
 }
 
 ImageSonificationProcessor::~ImageSonificationProcessor()
@@ -180,6 +183,42 @@ void ImageSonificationProcessor::processBlock(juce::AudioBuffer<float>& buffer, 
     }
     if (*algorithmParam == static_cast<float>(SineChordCrawler)) { //https://sites.google.com/umich.edu/eecs351-project-sonify/how-we-sonify?authuser=0
         this->eecs351wn22Alg.generate_next_samples(mono_signal, sample_len);
+    }
+
+    if (*algorithmParam == static_cast<float>(AdditiveCollumn)) {
+        auto image_height = imageBitmapPtr->height;
+        auto image_wifth = imageBitmapPtr->width;
+
+        for (size_t j = 0; j < sample_len; j++)
+        {
+            float new_sample = 0;
+            for (size_t i = 0; i < image_height; i++)
+            {
+                auto pix_c = imageBitmapPtr->getPixelColour(additiveCollumnIt, i);
+                short unsigned int r = pix_c.getRed();
+                short unsigned int g = pix_c.getGreen();
+                short unsigned int b = pix_c.getBlue();
+
+                auto combined_value = (r + g + b) / 3.0;
+
+                // combined_value - mnożnik sinusa (wzmocnienie gain)
+                // 200 - 16k
+                // (16000-200) * (i/image_height) + 200 - częstotliwośią sinusa
+                // generujesz kolejną wartosć sinusa TABLICOWO tak jak na jednych labach
+                // new_sample dodawać wartości do new sample
+            }
+
+            // kolejne rzeczy na new_sample
+            additiveSampleIt++;
+
+            if (additiveSampleIt == 1000) { // przejście do kolejnej kolumny, TODO - poprawić 1000 na sensowną wartość "na ucho"
+                additiveCollumnIt++;
+
+                // zrobić rzeczy związane ze zmianą kolumny (kolejny akord)
+            }
+
+            mono_signal[j] = new_sample;
+        }
     }
 
     // rewrite mono signal into all (both) channels

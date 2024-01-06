@@ -48,6 +48,7 @@ private:
 
     juce::ToggleButton noiseToggle;
     juce::ToggleButton toggleEECS;
+    juce::ToggleButton toggleAdditive;
 
     juce::ToggleButton Crawl1Toggle;
     juce::ToggleButton Crawl2Toggle;
@@ -59,9 +60,10 @@ private:
         { "random", Random, &Crawl3Toggle}
     };
 
-    ToggleButtonInfo<enum SythesiserAlgorithm> buttons[2] = {
+    ToggleButtonInfo<enum SythesiserAlgorithm> buttons[3] = {
         { "Image as noise", NoiseCrawler, &noiseToggle},
-        { "EECS 351 WN22", SineChordCrawler, &toggleEECS}
+        { "EECS 351 WN22", SineChordCrawler, &toggleEECS},
+        { "AdditiveCollumn", AdditiveCollumn, &toggleAdditive}
     };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ImageSonificationProcessorEditor)

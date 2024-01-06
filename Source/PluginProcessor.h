@@ -82,6 +82,10 @@ private:
     ImageAsNoiseAlgorithm imageAsNoiseAlg;
     EECS351WN22algorithm eecs351wn22Alg;
 
+    // AdditiveColumn
+    unsigned int additiveCollumnIt;
+    unsigned int additiveSampleIt;
+
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ImageSonificationProcessor)
