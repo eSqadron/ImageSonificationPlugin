@@ -15,19 +15,42 @@ WindowingAlgorithm::WindowingAlgorithm(unsigned int& WidthIt, unsigned int& Heig
 
 
 
-float calculateWindow(int windowSize, int currentHeight, int currentWidth, std::shared_ptr<juce::Image::BitmapData>imageBitmapPtr){
+float calculateWindow(int windowSize, int currentHeight, int currentWidth, std::shared_ptr<juce::Image::BitmapData>imageBitmapPtr, float previousSum){
     float sum = 0;
+    float columnSum = 0;
+    float nextcolumnSum = 0;
 
-    for (int x = 0; x < windowSize; ++x) {
-        for (int y = 0; y < windowSize; ++y) {
-            
-            auto pix_c =  imageBitmapPtr->getPixelColour(currentWidth + y, currentHeight + x);
-            float average = (pix_c.getFloatRed() + pix_c.getFloatGreen() + pix_c.getFloatBlue()) / 3.f;
-            sum += average;
-            
+    if (currentWidth == 0 || windowSize == 1) {
+        for (int x = 0; x < windowSize; ++x) {
+            for (int y = 0; y < windowSize; ++y) {
+                
+                auto pix_c =  imageBitmapPtr->getPixelColour(currentWidth + y, currentHeight + x);
+                float average = (pix_c.getFloatRed() + pix_c.getFloatGreen() + pix_c.getFloatBlue()) / 3.f;
+                sum += average;
+                
+            }
         }
+        return sum;
     }
-    return sum;
+    
+    else {
+        
+        for(int y = 0; y < windowSize; ++y){
+            
+            auto pix_c =  imageBitmapPtr->getPixelColour(currentWidth -1, currentHeight + y);
+            float average = (pix_c.getFloatRed() + pix_c.getFloatGreen() + pix_c.getFloatBlue()) / 3.f;
+            columnSum += average;
+        }
+        
+        for(int y = 0; y < windowSize; ++y){
+            
+            auto pix_c =  imageBitmapPtr->getPixelColour(currentWidth +windowSize, currentHeight + y);
+            float average = (pix_c.getFloatRed() + pix_c.getFloatGreen() + pix_c.getFloatBlue()) / 3.f;
+            nextcolumnSum += average;
+        }
+        return previousSum-columnSum+nextcolumnSum;
+        
+    }
 }
 
 
@@ -38,7 +61,7 @@ void WindowingAlgorithm::generate_next_samples(float* output_buffer, unsigned in
     int k = 0;
     int height = imageBitmapPtr->height;
     int width = imageBitmapPtr->width;
-    
+    float sum = 0;
     
      
     
@@ -46,7 +69,7 @@ void WindowingAlgorithm::generate_next_samples(float* output_buffer, unsigned in
         for (; HeightIt < height - windowSize + 1; ++HeightIt) {
             
             for (; WidthIt < width - windowSize + 1; ++WidthIt) {
-                float sum = calculateWindow(windowSize, HeightIt, WidthIt,imageBitmapPtr);
+                sum = calculateWindow(windowSize, HeightIt, WidthIt,imageBitmapPtr, sum);
                 
                 if( k < buffer_length){
                     *(output_buffer + k) = sum / (windowSize * windowSize);
@@ -62,21 +85,4 @@ void WindowingAlgorithm::generate_next_samples(float* output_buffer, unsigned in
         HeightIt = 0;
     }
 }
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
