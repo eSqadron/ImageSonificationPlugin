@@ -60,6 +60,8 @@ private:
     juce::ToggleButton noiseToggle;
     juce::ToggleButton toggleEECS;
     juce::ToggleButton windowToggle;
+    juce::ToggleButton terrainToggle;
+
 
     
     juce::ToggleButton Crawl1Toggle;
@@ -72,10 +74,11 @@ private:
         { "random", Random, &Crawl3Toggle}
     };
 
-    ToggleButtonInfo<enum SythesiserAlgorithm> buttons[3] = {
+    ToggleButtonInfo<enum SythesiserAlgorithm> buttons[4] = {
         { "Image as noise", NoiseCrawler, &noiseToggle},
         { "EECS 351 WN22", SineChordCrawler, &toggleEECS},
-        { "WINDOWING", Windowing, &windowToggle}
+        { "WINDOWING", Windowing, &windowToggle},
+        { "Terrain algorithm", Terrain, &terrainToggle}
     };
     
     
