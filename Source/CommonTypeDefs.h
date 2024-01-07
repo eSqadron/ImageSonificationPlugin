@@ -13,7 +13,9 @@
 
 enum SythesiserAlgorithm {
     NoiseCrawler,
-    SineChordCrawler
+    SineChordCrawler,
+    Windowing,
+    Terrain
 };
 
 enum CrawlingDirection {

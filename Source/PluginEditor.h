@@ -30,7 +30,10 @@ struct ToggleButtonInfo {
 //==============================================================================
 /**
 */
-class ImageSonificationProcessorEditor  : public juce::AudioProcessorEditor
+
+
+
+class ImageSonificationProcessorEditor  : public juce::AudioProcessorEditor, private juce::Slider::Listener
 {
 public:
     ImageSonificationProcessorEditor (ImageSonificationProcessor&);
@@ -44,11 +47,23 @@ private:
     juce::ImageComponent imageComponent;
 
     juce::TextEditor imagePathText;
+    void sliderValueChanged (juce::Slider* slider) override; // MOD 11 domyslna funkcja callback
+    // This reference is provided as a quick way for your editor to
+    // access the processor object that created it.
+
+    
     ImageSonificationProcessor& audioProcessor;
+    
+    juce::Slider windowSize;
+
 
     juce::ToggleButton noiseToggle;
     juce::ToggleButton toggleEECS;
+    juce::ToggleButton windowToggle;
+    juce::ToggleButton terrainToggle;
 
+
+    
     juce::ToggleButton Crawl1Toggle;
     juce::ToggleButton Crawl2Toggle;
     juce::ToggleButton Crawl3Toggle;
@@ -59,10 +74,26 @@ private:
         { "random", Random, &Crawl3Toggle}
     };
 
-    ToggleButtonInfo<enum SythesiserAlgorithm> buttons[2] = {
+    ToggleButtonInfo<enum SythesiserAlgorithm> buttons[4] = {
         { "Image as noise", NoiseCrawler, &noiseToggle},
-        { "EECS 351 WN22", SineChordCrawler, &toggleEECS}
+        { "EECS 351 WN22", SineChordCrawler, &toggleEECS},
+        { "WINDOWING", Windowing, &windowToggle},
+        { "Terrain algorithm", Terrain, &terrainToggle}
     };
+    
+    
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ImageSonificationProcessorEditor)
+    
 };
+
+
+
+
+
+
+
+
+
+
+
