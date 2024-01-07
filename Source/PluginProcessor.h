@@ -12,6 +12,8 @@
 #include "ImageAsNoiseAlgorithm.h"
 #include "EECS351WN22algorithm.h"
 #include "WindowingAlgorithm.h"
+#include "TerrainAlgorithm.h"
+
 
 //==============================================================================
 /**
@@ -85,6 +87,7 @@ private:
     ImageAsNoiseAlgorithm imageAsNoiseAlg;
     EECS351WN22algorithm eecs351wn22Alg;
     WindowingAlgorithm windowingAlg;
+    TerrainAlgorithm terrainAlg;
 
 
 
