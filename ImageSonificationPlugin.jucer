@@ -14,6 +14,14 @@
               file="Source/ImageAsNoiseAlgorithm.cpp"/>
         <FILE id="zgzE9K" name="ImageAsNoiseAlgorithm.h" compile="0" resource="0"
               file="Source/ImageAsNoiseAlgorithm.h"/>
+        <FILE id="muccrV" name="LandscapeAlgorithm.cpp" compile="1" resource="0"
+              file="Source/LandscapeAlgorithm.cpp"/>
+        <FILE id="xaCWo3" name="LandscapeAlgorithm.h" compile="0" resource="0"
+              file="Source/LandscapeAlgorithm.h"/>
+        <FILE id="SpPVP5" name="WindowingAlgorithm.cpp" compile="1" resource="0"
+              file="Source/WindowingAlgorithm.cpp"/>
+        <FILE id="mLfhNE" name="WindowingAlgorithm.h" compile="0" resource="0"
+              file="Source/WindowingAlgorithm.h"/>
       </GROUP>
       <FILE id="PXG3L7" name="CommonTypeDefs.h" compile="0" resource="0"
             file="Source/CommonTypeDefs.h"/>

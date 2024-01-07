@@ -19,36 +19,37 @@ float calculateWindow(int windowSize, int currentHeight, int currentWidth, std::
     float sum = 0;
     float columnSum = 0;
     float nextcolumnSum = 0;
+    juce::Colour pix_c;
+    float average;
 
     if (currentWidth == 0 || windowSize == 1) {
         for (int x = 0; x < windowSize; ++x) {
             for (int y = 0; y < windowSize; ++y) {
                 
-                auto pix_c =  imageBitmapPtr->getPixelColour(currentWidth + y, currentHeight + x);
-                float average = (pix_c.getFloatRed() + pix_c.getFloatGreen() + pix_c.getFloatBlue()) / 3.f;
+                pix_c =  imageBitmapPtr->getPixelColour(currentWidth + y, currentHeight + x);
+                average = (pix_c.getFloatRed() + pix_c.getFloatGreen() + pix_c.getFloatBlue()) / 3.f;
                 sum += average;
                 
             }
         }
         return sum;
     }
-    
     else {
         
         for(int y = 0; y < windowSize; ++y){
             
-            auto pix_c =  imageBitmapPtr->getPixelColour(currentWidth -1, currentHeight + y);
-            float average = (pix_c.getFloatRed() + pix_c.getFloatGreen() + pix_c.getFloatBlue()) / 3.f;
+            pix_c =  imageBitmapPtr->getPixelColour(currentWidth -1, currentHeight + y);
+            average = (pix_c.getFloatRed() + pix_c.getFloatGreen() + pix_c.getFloatBlue()) / 3.f;
             columnSum += average;
         }
         
         for(int y = 0; y < windowSize; ++y){
             
-            auto pix_c =  imageBitmapPtr->getPixelColour(currentWidth +windowSize, currentHeight + y);
-            float average = (pix_c.getFloatRed() + pix_c.getFloatGreen() + pix_c.getFloatBlue()) / 3.f;
+            pix_c =  imageBitmapPtr->getPixelColour(currentWidth + windowSize, currentHeight + y);
+            average = (pix_c.getFloatRed() + pix_c.getFloatGreen() + pix_c.getFloatBlue()) / 3.f;
             nextcolumnSum += average;
         }
-        return previousSum-columnSum+nextcolumnSum;
+        return previousSum - columnSum + nextcolumnSum;
         
     }
 }

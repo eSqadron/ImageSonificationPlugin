@@ -5,7 +5,7 @@
 //  Created by Karolina Płaneta on 03/01/2024.
 //
 
-#include "TerrainAlgorithm.h"
+#include "landscapeAlgorithm.h"
 
 
 
@@ -14,7 +14,7 @@ TerrainAlgorithm::TerrainAlgorithm(unsigned int& WidthIt, unsigned int& HeightIt
 }
 
 void TerrainAlgorithm::generate_next_samples(float* output_buffer, unsigned int buffer_length)
-{
+{      
         int k = 0;
         int height = imageBitmapPtr->height;
         int width = imageBitmapPtr->width;
@@ -24,36 +24,36 @@ void TerrainAlgorithm::generate_next_samples(float* output_buffer, unsigned int 
             HeightIt = 1;
         }
         
-       while (true) {
+        while (true) {
             for (; WidthIt < width; ++WidthIt) {
-                float maxroznica = 0;
-                int indeks;
+                float maxDifference = 0;
+                int index = 0;
                 
                 
                 for (; HeightIt < height; ++HeightIt) {
                     
-                    auto pix_c = imageBitmapPtr->getPixelColour(WidthIt, HeightIt); 
-                    float jasnoscpixela = (pix_c.getFloatRed() + pix_c.getFloatGreen() + pix_c.getFloatBlue()) / 3.f;
+                    auto pix_c = imageBitmapPtr->getPixelColour(WidthIt, HeightIt);
+                    float pixelBrightness = (pix_c.getFloatRed() + pix_c.getFloatGreen() + pix_c.getFloatBlue()) / 3.f;
                     
-                    auto poprzednipixel = imageBitmapPtr->getPixelColour(WidthIt, HeightIt-1);
-                    float jasnoscpoprzedniegopixela = (poprzednipixel.getFloatRed() + poprzednipixel.getFloatGreen() + poprzednipixel.getFloatBlue()) / 3.f;
+                    auto previousPixel = imageBitmapPtr->getPixelColour(WidthIt, HeightIt-1);
+                    float previousPixelBrightness = (previousPixel.getFloatRed() + previousPixel.getFloatGreen() + previousPixel.getFloatBlue()) / 3.f;
                     
                     
-                    float roznica = std::abs(jasnoscpixela - jasnoscpoprzedniegopixela);
+                    float difference = std::abs(pixelBrightness - previousPixelBrightness);
                     
-                    if(roznica > maxroznica){
-                        maxroznica = roznica;
-                        indeks = HeightIt-1;
+                    if(difference > maxDifference){
+                        maxDifference = difference;
+                        index = HeightIt-1;
                     }
                     
                 }
                 HeightIt = 1;
                 
-                imageBitmapPtr->setPixelColour(WidthIt, indeks, juce::Colour(255, 0, 0));
+                  imageBitmapPtr->setPixelColour(WidthIt, index, juce::Colour(255, 0, 0));
         
                 
                 if( k < buffer_length){
-                    *(output_buffer + k) = float(indeks)/float(height);
+                    *(output_buffer + k) = float(index)/float(height);
                     
                     k++;
                 }
@@ -63,5 +63,5 @@ void TerrainAlgorithm::generate_next_samples(float* output_buffer, unsigned int 
                 
             }
             WidthIt = 0;
-       }
+        }
     }
