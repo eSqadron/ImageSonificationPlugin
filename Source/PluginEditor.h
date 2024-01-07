@@ -54,7 +54,7 @@ private:
     
     ImageSonificationProcessor& audioProcessor;
     
-    juce::Slider windowSize;
+    juce::Slider windowSizeSlider;
 
 
     juce::ToggleButton noiseToggle;
@@ -78,7 +78,7 @@ private:
         { "Image as noise", NoiseCrawler, &noiseToggle},
         { "EECS 351 WN22", SineChordCrawler, &toggleEECS},
         { "WINDOWING", Windowing, &windowToggle},
-        { "Terrain algorithm", Terrain, &terrainToggle}
+        { "Landscape algorithm", Landscape, &terrainToggle}
     };
     
     

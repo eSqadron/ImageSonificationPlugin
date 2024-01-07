@@ -27,7 +27,7 @@ ImageSonificationProcessorEditor::ImageSonificationProcessorEditor(ImageSonifica
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
 
-    windowSize.addListener (this);
+    windowSizeSlider.addListener (this);
 
     
     // BUTTONS FOR ALGORITHM CHOOSING
@@ -67,10 +67,11 @@ ImageSonificationProcessorEditor::ImageSonificationProcessorEditor(ImageSonifica
             imageComponent.setImage(audioProcessor.image);
             audioProcessor.resetBitmap();
             audioProcessor.imageIsBeingLoaded = false;
-            
-            int newSliderMaxValue = (audioProcessor.imageBitmapPtr->height > audioProcessor.imageBitmapPtr->width) ? audioProcessor.imageBitmapPtr->width : audioProcessor.imageBitmapPtr->height;
-            
-            windowSize.setRange(1, newSliderMaxValue, 1);
+               
+            // TODO - maybe cap slider max value at height or width?
+            //int newSliderMaxValue = (audioProcessor.imageBitmapPtr->height > audioProcessor.imageBitmapPtr->width) ? audioProcessor.imageBitmapPtr->width : audioProcessor.imageBitmapPtr->height;
+            //
+            //windowSizeSlider.setRange(1, newSliderMaxValue, 1);
         }
     };
 
@@ -86,16 +87,16 @@ ImageSonificationProcessorEditor::ImageSonificationProcessorEditor(ImageSonifica
 
     setSize(800, 700);
     
-    windowSize.setSliderStyle (juce::Slider::LinearBar);
-    windowSize.setRange(1, 100, 1); // Zakres od 1 do 100 z krokiem 1
-    windowSize.setTextBoxStyle (juce::Slider::TextBoxAbove, false, 90, 0);
-    windowSize.setPopupDisplayEnabled (true, false, this);
+    windowSizeSlider.setSliderStyle (juce::Slider::LinearBar);
+    windowSizeSlider.setRange(1, 100, 1); // Zakres od 1 do 100 z krokiem 1
+    windowSizeSlider.setTextBoxStyle (juce::Slider::TextBoxAbove, false, 90, 0);
+    windowSizeSlider.setPopupDisplayEnabled (true, false, this);
 //    windowSize.setTextValueSuffix ("Window size");
-    windowSize.setValue(1);
+    windowSizeSlider.setValue(1);
 //    windowSize.setTitle("Set window size as percent of image size(only for windowing algorithm)");
-    windowSize.setTextValueSuffix(": is the current window size (only for windowing algorithm)");
+    windowSizeSlider.setTextValueSuffix(": is the current window size (only for windowing algorithm)");
     // MOD 4 dodanie suwaka do edytora
-    addAndMakeVisible (&windowSize);
+    addAndMakeVisible (&windowSizeSlider);
     
 }
 
@@ -112,7 +113,7 @@ ImageSonificationProcessorEditor::~ImageSonificationProcessorEditor()
 // MOD 13 definicja funkcji do obslugi
 void ImageSonificationProcessorEditor::sliderValueChanged(juce::Slider* slider)
 {
-audioProcessor.valueOfSlider = windowSize.getValue();
+audioProcessor.valueOfSlider = windowSizeSlider.getValue();
 }
 
 
@@ -146,5 +147,5 @@ void ImageSonificationProcessorEditor::resized()
 
     imageComponent.setBounds(10, getHeight()-425, getWidth() - 20, 400);
     
-    windowSize.setBounds (40, 110, getWidth()-60, 20);
+    windowSizeSlider.setBounds (150, 110, getWidth()-170, 20);
 }
