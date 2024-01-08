@@ -13,7 +13,8 @@
 
 enum SythesiserAlgorithm {
     NoiseCrawler,
-    SineChordCrawler
+    SineChordCrawler,
+    Reverb
 };
 
 enum CrawlingDirection {
