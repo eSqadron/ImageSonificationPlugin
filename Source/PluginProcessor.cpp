@@ -182,6 +182,10 @@ void ImageSonificationProcessor::processBlock(juce::AudioBuffer<float>& buffer, 
         this->eecs351wn22Alg.generate_next_samples(mono_signal, sample_len);
     }
 
+    if (*algorithmParam == static_cast<float>(Reverb)) {
+        // TODO
+    }
+
     // rewrite mono signal into all (both) channels
     for (int channel = 0; channel < totalNumInputChannels; ++channel) {
         auto* channelData = buffer.getWritePointer(channel);
