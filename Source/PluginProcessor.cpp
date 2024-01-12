@@ -115,6 +115,15 @@ void ImageSonificationProcessor::changeProgramName(int index, const juce::String
 void ImageSonificationProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
     this->eecs351wn22Alg.prepareToPlay(sampleRate, samplesPerBlock);
+    this->sampleRate = sampleRate;
+
+
+
+                                                                                                                //---------------->
+
+
+
+
 }
 
 void ImageSonificationProcessor::releaseResources()
@@ -183,7 +192,10 @@ void ImageSonificationProcessor::processBlock(juce::AudioBuffer<float>& buffer, 
     }
 
     if (*algorithmParam == static_cast<float>(Reverb)) {
-        // TODO
+        
+
+        reverb.processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
+
     }
 
     // rewrite mono signal into all (both) channels
@@ -194,6 +206,8 @@ void ImageSonificationProcessor::processBlock(juce::AudioBuffer<float>& buffer, 
         }
         
     }
+
+    
 }
 
 //==============================================================================
@@ -231,6 +245,69 @@ void ImageSonificationProcessor::resetBitmap()
 
     this->imageAsNoiseAlg.imageBitmapPtr = this->imageBitmapPtr;
     this->eecs351wn22Alg.imageBitmapPtr = this->imageBitmapPtr;
+
+    auto image_height = imageBitmapPtr->height;
+    auto image_width = imageBitmapPtr->width;
+
+    int tabSize = image_height * image_width;
+
+    //int* tabR = new int[tabSize];
+    //int* tabG = new int[tabSize];
+    //int* tabB = new int[tabSize];
+
+    auto sumR = 0.0;
+    auto meanR = 0.0;
+    auto sumG = 0.0;
+    auto meanG = 0.0;
+    auto sumB = 0.0;
+    auto meanB = 0.0;
+
+    for (int i = 0; i < image_height; ++i)
+    {
+        for (int j = 0; j < image_width; ++j)
+        {
+            auto pix_c = imageBitmapPtr->getPixelColour(j, i);
+            short unsigned int r = pix_c.getRed();
+            short unsigned int g = pix_c.getGreen();
+            short unsigned int b = pix_c.getBlue();
+
+            //tabR[image_width*i+j] = r;
+            //tabG[image_width * i + j] = g;
+            //tabB[image_width * i + j] = b;
+            sumR += r;
+            sumG += g;
+            sumB += b;
+        }
+    }
+
+    //for (int i = 0; i < tabSize; ++i) {
+    //    sumR += tabR[i];
+    //}
+
+    //for (int i = 0; i < tabSize; ++i) {
+    //    sumG += tabG[i];
+    //}
+
+    //for (int i = 0; i < tabSize; ++i) {
+    //    sumB += tabB[i];
+    //}
+
+    meanR = sumR / tabSize;
+    meanG = sumG / tabSize;
+    meanB = sumB / tabSize;
+
+    juce::Reverb::Parameters reverbParams;
+    reverbParams.roomSize = meanR/256;  // Adjust room size (0.0f - 1.0f)
+    reverbParams.damping = 0.1f;   // Adjust damping (0.0f - 1.0f)
+    reverbParams.wetLevel = meanG/256;  // Adjust wet level (0.0f - 1.0f)
+    reverbParams.dryLevel = meanB / 256;  // Adjust dry level (0.0f - 1.0f)
+    reverbParams.width = 1.0f;     // Adjust stereo width (0.0f - 1.0f)
+    reverbParams.freezeMode = false; // Enable/disable freeze mode
+
+    reverb.setParameters(reverbParams);
+    reverb.setSampleRate(this->sampleRate);
+
+
 }
 
 //==============================================================================

@@ -23,6 +23,9 @@ class ImageSonificationProcessor : public juce::AudioProcessor
 #endif
 {
 public:
+
+    juce::Reverb reverb;
+
     //==============================================================================
     ImageSonificationProcessor();
     ~ImageSonificationProcessor() override;
@@ -82,6 +85,7 @@ private:
     ImageAsNoiseAlgorithm imageAsNoiseAlg;
     EECS351WN22algorithm eecs351wn22Alg;
 
+    double sampleRate = 0.0;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ImageSonificationProcessor)
