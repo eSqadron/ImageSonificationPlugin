@@ -197,15 +197,18 @@ void ImageSonificationProcessor::processBlock(juce::AudioBuffer<float>& buffer, 
         reverb.processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
 
     }
+    if (*algorithmParam != static_cast<float>(Reverb))
+    {
+        for (int channel = 0; channel < totalNumInputChannels; ++channel) {
+            auto* channelData = buffer.getWritePointer(channel);
+            for (int i = 0; i < sample_len; ++i) {
+                channelData[i] = mono_signal[i];
+            }
 
-    // rewrite mono signal into all (both) channels
-    for (int channel = 0; channel < totalNumInputChannels; ++channel) {
-        auto* channelData = buffer.getWritePointer(channel);
-        for (int i = 0; i < sample_len; ++i) {
-            channelData[i] = mono_signal[i];
         }
-        
     }
+    // rewrite mono signal into all (both) channels
+    
 
     
 }
