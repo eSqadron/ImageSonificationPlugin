@@ -9,17 +9,13 @@
 */
 
 #include <JuceHeader.h>
+#include "PixelByPixelBase.h"
 #pragma once
 
 
-class ImageAsNoiseAlgorithm {
+class ImageAsNoiseAlgorithm: public PixelByPixelBase {
 public:
-    ImageAsNoiseAlgorithm(unsigned int& WidthIt, unsigned int& HeightIt, std::shared_ptr<juce::Image::BitmapData> imageBitmapPtr);
+    ImageAsNoiseAlgorithm(CrawlingDirection& directionOfPlay, int& windowSize);
 
-    void generate_next_samples(float* output_buffer, unsigned int buffer_length);
-
-    std::shared_ptr<juce::Image::BitmapData> imageBitmapPtr;
-private:
-    unsigned int& WidthIt;
-    unsigned int& HeightIt;
+    float getSampleFromPixel(juce::Colour pixel) override;
 };

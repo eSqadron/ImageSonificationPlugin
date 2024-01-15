@@ -8,17 +8,13 @@
 
 
 #include <JuceHeader.h>
+#include "AlgorithmBase.h"
 #pragma once
 
 
-class TerrainAlgorithm {
+class TerrainAlgorithm: public AlgorithmBase {
 public:
-    TerrainAlgorithm(unsigned int& WidthIt, unsigned int& HeightIt, std::shared_ptr<juce::Image::BitmapData> imageBitmapPtr);
+    TerrainAlgorithm();
 
-    void generate_next_samples(float* output_buffer, unsigned int buffer_length);
-
-    std::shared_ptr<juce::Image::BitmapData> imageBitmapPtr;
-private:
-    unsigned int& WidthIt;
-    unsigned int& HeightIt;
+    void generateNextSamples(float* output_buffer, unsigned int buffer_length) override;
 };

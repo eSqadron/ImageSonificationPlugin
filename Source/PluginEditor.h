@@ -6,12 +6,12 @@
   ==============================================================================
 */
 
-#pragma once
+
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "CommonTypeDefs.h"
-
+#pragma once
 
 template <typename T>
 struct ToggleButtonInfo {
@@ -77,7 +77,7 @@ private:
     ToggleButtonInfo<enum SythesiserAlgorithm> buttons[4] = {
         { "Image as noise", NoiseCrawler, &noiseToggle},
         { "EECS 351 WN22", SineChordCrawler, &toggleEECS},
-        { "WINDOWING", Windowing, &windowToggle},
+        { "Windowing obsolete", Windowing, &windowToggle},
         { "Landscape algorithm", Landscape, &terrainToggle}
     };
     

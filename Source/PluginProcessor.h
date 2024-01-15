@@ -9,6 +9,9 @@
 #pragma once
 
 #include <JuceHeader.h>
+
+#include "CommonTypeDefs.h"
+
 #include "ImageAsNoiseAlgorithm.h"
 #include "EECS351WN22algorithm.h"
 #include "WindowingAlgorithm.h"
@@ -67,27 +70,27 @@ public:
 
     std::unique_ptr<juce::FileLogger> m_flogger;
 
-    std::shared_ptr<juce::Image::BitmapData> imageBitmapPtr;
     juce::Image image;
 
     std::atomic <float>* algorithmParam = nullptr;
     std::atomic <float>* crawlingDirectionParam = nullptr;
 
+    CrawlingDirection directionOfPixelByPixelPlay;
+
     bool imageIsBeingLoaded = true;
     
-    int valueOfSlider = 1;
+    int WindowSizeSliderValue = 1;
 
 private:
     juce::AudioProcessorValueTreeState parameters;
-
-    unsigned int widthIt = 0;
-    unsigned int heightIt = 0;
 
     //
     ImageAsNoiseAlgorithm imageAsNoiseAlg;
     EECS351WN22algorithm eecs351wn22Alg;
     WindowingAlgorithm windowingAlg;
     TerrainAlgorithm landscapeAlg;
+
+    std::array<AlgorithmBase*, 4> AlgorithmsArray;
 
 
 

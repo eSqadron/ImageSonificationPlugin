@@ -9,13 +9,13 @@
 
 
 
-TerrainAlgorithm::TerrainAlgorithm(unsigned int& WidthIt, unsigned int& HeightIt, std::shared_ptr<juce::Image::BitmapData> imageBitmapPtr): WidthIt(WidthIt), HeightIt(HeightIt), imageBitmapPtr(imageBitmapPtr)
+TerrainAlgorithm::TerrainAlgorithm(): AlgorithmBase()
 {
 }
 
-void TerrainAlgorithm::generate_next_samples(float* output_buffer, unsigned int buffer_length)
+void TerrainAlgorithm::generateNextSamples(float* output_buffer, unsigned int buffer_length)
 {      
-        int k = 0;
+        unsigned int k = 0;
         int height = imageBitmapPtr->height;
         int width = imageBitmapPtr->width;
         

@@ -8,28 +8,21 @@
   ==============================================================================
 */
 #include <JuceHeader.h>
+#include "PixelByPixelBase.h"
 
 #pragma once
 
-class EECS351WN22algorithm {
+class EECS351WN22algorithm : public PixelByPixelBase {
 public:
-    EECS351WN22algorithm(unsigned int& WidthIt, unsigned int& HeightIt, std::shared_ptr<juce::Image::BitmapData> imageBitmapPtr);
+    EECS351WN22algorithm(CrawlingDirection& directionOfPlay, int& windowSize);
 
-    void generate_next_samples(float* output_buffer, unsigned int buffer_length);
+    float getSampleFromPixel(juce::Colour pixel) override;
+    void iteratePixelAlgorithmSpecific(juce::Colour pixel) override;
 
-    void prepareToPlay(double sampleRate, int samplesPerBlock);
-
-    std::shared_ptr<juce::Image::BitmapData> imageBitmapPtr;
 private:
-    unsigned int& WidthIt;
-    unsigned int& HeightIt;
-
     short unsigned int chords[3] = { 36, 40, 43 };
     double angleDelta[3] = { 0, 0, 0 };
     double currentAngle[3] = { 0, 0, 0 };
 
-    short unsigned int EECS_it = 0;
     short unsigned int EECS_limit = 35;
-
-    double currentSampleRate = 0.0;
 };

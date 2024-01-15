@@ -9,13 +9,14 @@
 
 #include "WindowingAlgorithm.h"
 
-WindowingAlgorithm::WindowingAlgorithm(unsigned int& WidthIt, unsigned int& HeightIt, std::shared_ptr<juce::Image::BitmapData> imageBitmapPtr): WidthIt(WidthIt), HeightIt(HeightIt), imageBitmapPtr(imageBitmapPtr)
+WindowingAlgorithm::WindowingAlgorithm(int& windowSize): AlgorithmBase(), WindowSize(windowSize)
 {
 }
 
 
 
-float calculateWindow(int windowSize, int currentHeight, int currentWidth, std::shared_ptr<juce::Image::BitmapData>imageBitmapPtr, float previousSum){
+float WindowingAlgorithm::calculateWindow(int windowSize, int currentHeight, int currentWidth, float previousSum)
+{
     float sum = 0;
     float columnSum = 0;
     float nextcolumnSum = 0;
@@ -55,11 +56,11 @@ float calculateWindow(int windowSize, int currentHeight, int currentWidth, std::
 }
 
 
-void WindowingAlgorithm::generate_next_samples(float* output_buffer, unsigned int buffer_length, int windowSize)
+void WindowingAlgorithm::generateNextSamples(float* output_buffer, unsigned int buffer_length)
 {
     
     
-    int k = 0;
+    unsigned int k = 0;
     int height = imageBitmapPtr->height;
     int width = imageBitmapPtr->width;
     float sum = 0;
@@ -67,13 +68,13 @@ void WindowingAlgorithm::generate_next_samples(float* output_buffer, unsigned in
      
     
     while (true) {
-        for (; HeightIt < height - windowSize + 1; ++HeightIt) {
+        for (; HeightIt < height - WindowSize + 1; ++HeightIt) {
             
-            for (; WidthIt < width - windowSize + 1; ++WidthIt) {
-                sum = calculateWindow(windowSize, HeightIt, WidthIt,imageBitmapPtr, sum);
+            for (; WidthIt < width - WindowSize + 1; ++WidthIt) {
+                sum = calculateWindow(WindowSize, HeightIt, WidthIt, sum);
                 
                 if( k < buffer_length){
-                    *(output_buffer + k) = sum / (windowSize * windowSize);
+                    *(output_buffer + k) = sum / (WindowSize * WindowSize);
                     
                     k++;
                 }

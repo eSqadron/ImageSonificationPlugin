@@ -11,8 +11,8 @@
 
 enum RadioButtonIds
 {
-    SynthAlgorithmID = 1001,
-    CrawlingDirection = 1002
+    SynthAlgorithmButtonId = 1001,
+    CrawlingDirectionButtonId = 1002
 };
 
 
@@ -31,8 +31,8 @@ ImageSonificationProcessorEditor::ImageSonificationProcessorEditor(ImageSonifica
 
     
     // BUTTONS FOR ALGORITHM CHOOSING
-    for (auto button: buttons) {
-        button.button->setRadioGroupId(SynthAlgorithmID);
+    for (auto& button: buttons) {
+        button.button->setRadioGroupId(SynthAlgorithmButtonId);
         auto alg = button.alg;
         button.button->onClick = [this, alg]() {
             *audioProcessor.algorithmParam = static_cast<float>(alg);
@@ -45,8 +45,8 @@ ImageSonificationProcessorEditor::ImageSonificationProcessorEditor(ImageSonifica
 
 
     // BUTTONS FOR CRAWLING DIRECTIONS
-    for (auto button : crawl_direction_buttons) {
-        button.button->setRadioGroupId(CrawlingDirection);
+    for (auto& button : crawl_direction_buttons) {
+        button.button->setRadioGroupId(CrawlingDirectionButtonId);
         auto dir = button.alg;
         button.button->onClick = [this, dir]() {
             *audioProcessor.crawlingDirectionParam = static_cast<float>(dir);
@@ -75,7 +75,7 @@ ImageSonificationProcessorEditor::ImageSonificationProcessorEditor(ImageSonifica
         }
     };
 
-    if (audioProcessor.imageBitmapPtr == nullptr) {
+    if (AlgorithmBase::imageBitmapPtr == nullptr) {
         imagePathText.setText("Enter path to image");
     }
     else {
@@ -94,15 +94,10 @@ ImageSonificationProcessorEditor::ImageSonificationProcessorEditor(ImageSonifica
 //    windowSize.setTextValueSuffix ("Window size");
     windowSizeSlider.setValue(1);
 //    windowSize.setTitle("Set window size as percent of image size(only for windowing algorithm)");
-    windowSizeSlider.setTextValueSuffix(": is the current window size (only for windowing algorithm)");
+    windowSizeSlider.setTextValueSuffix(": is the current window size (only for windowing algorithmm)");
     // MOD 4 dodanie suwaka do edytora
     addAndMakeVisible (&windowSizeSlider);
-    
 }
-
-
-
-
 
 
 ImageSonificationProcessorEditor::~ImageSonificationProcessorEditor()
@@ -111,9 +106,9 @@ ImageSonificationProcessorEditor::~ImageSonificationProcessorEditor()
 }
 
 // MOD 13 definicja funkcji do obslugi
-void ImageSonificationProcessorEditor::sliderValueChanged(juce::Slider* slider)
+void ImageSonificationProcessorEditor::sliderValueChanged(juce::Slider*)
 {
-audioProcessor.valueOfSlider = windowSizeSlider.getValue();
+    audioProcessor.WindowSizeSliderValue = static_cast<int>(windowSizeSlider.getValue());
 }
 
 
@@ -134,13 +129,13 @@ void ImageSonificationProcessorEditor::resized()
     imagePathText.setBounds(10, 10, getWidth() - 20, 20);
 
     int it = 170;
-    for (auto button : crawl_direction_buttons) {
+    for (auto& button : crawl_direction_buttons) {
         button.button->setBounds(it, 40, 150, 25);
         it += 150;
     }
 
     it = 40;
-    for (auto button : buttons) {
+    for (auto& button : buttons) {
         button.button->setBounds(10, it, 150, 25);
         it += 25;
     }
