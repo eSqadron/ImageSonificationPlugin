@@ -73,6 +73,8 @@ public:
     std::atomic <float>* algorithmParam = nullptr;
     std::atomic <float>* crawlingDirectionParam = nullptr;
 
+    CrawlingDirection directionOfPixelByPixelPlay;
+
     bool imageIsBeingLoaded = true;
     
     int valueOfSlider = 1;

@@ -18,6 +18,10 @@
               file="Source/LandscapeAlgorithm.cpp"/>
         <FILE id="xaCWo3" name="LandscapeAlgorithm.h" compile="0" resource="0"
               file="Source/LandscapeAlgorithm.h"/>
+        <FILE id="tsVahA" name="PixelByPixelBase.cpp" compile="1" resource="0"
+              file="Source/PixelByPixelBase.cpp"/>
+        <FILE id="f0q3xw" name="PixelByPixelBase.h" compile="0" resource="0"
+              file="Source/PixelByPixelBase.h"/>
         <FILE id="SpPVP5" name="WindowingAlgorithm.cpp" compile="1" resource="0"
               file="Source/WindowingAlgorithm.cpp"/>
         <FILE id="mLfhNE" name="WindowingAlgorithm.h" compile="0" resource="0"

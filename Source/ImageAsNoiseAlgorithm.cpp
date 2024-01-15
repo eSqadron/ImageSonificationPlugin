@@ -10,26 +10,12 @@
 
 #include "ImageAsNoiseAlgorithm.h"
 
-ImageAsNoiseAlgorithm::ImageAsNoiseAlgorithm(unsigned int& WidthIt, unsigned int& HeightIt, std::shared_ptr<juce::Image::BitmapData> imageBitmapPtr): WidthIt(WidthIt), HeightIt(HeightIt), imageBitmapPtr(imageBitmapPtr)
+ImageAsNoiseAlgorithm::ImageAsNoiseAlgorithm(unsigned int& WidthIt, unsigned int& HeightIt, std::shared_ptr<juce::Image::BitmapData> imageBitmapPtr, CrawlingDirection& directionOfPlay): PixelByPixelBase(WidthIt, HeightIt, imageBitmapPtr, directionOfPlay)
 {
 }
 
-void ImageAsNoiseAlgorithm::generate_next_samples(float* output_buffer, unsigned int buffer_length)
+double ImageAsNoiseAlgorithm::getSampleFromPixel()
 {
-    for (unsigned int i = 0; i < buffer_length; i++)
-    {
-        auto pix_c = imageBitmapPtr->getPixelColour(WidthIt, HeightIt);
-        *(output_buffer + i) = (pix_c.getFloatRed() + pix_c.getFloatGreen() + pix_c.getFloatBlue()) / 3.f;
-
-        // Go from left to right in rows
-        WidthIt += 1;
-        if (WidthIt >= imageBitmapPtr->width) {
-            WidthIt = 0;
-            HeightIt += 1;
-
-            if (HeightIt >= imageBitmapPtr->height) {
-                HeightIt = 0;
-            }
-        }
-    }
+    auto pix_c = imageBitmapPtr->getPixelColour(WidthIt, HeightIt);
+    return (pix_c.getFloatRed() + pix_c.getFloatGreen() + pix_c.getFloatBlue()) / 3.f;
 }

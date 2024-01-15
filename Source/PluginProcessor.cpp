@@ -33,7 +33,7 @@ ImageSonificationProcessor::ImageSonificationProcessor()
                                                          100,              // maximum value
                                                          0)            // default value
         }),
-    imageAsNoiseAlg(widthIt, heightIt, imageBitmapPtr),
+    imageAsNoiseAlg(widthIt, heightIt, imageBitmapPtr, directionOfPixelByPixelPlay),
     eecs351wn22Alg(widthIt, heightIt, imageBitmapPtr),
     windowingAlg(widthIt, heightIt, imageBitmapPtr),
     landscapeAlg(widthIt, heightIt, imageBitmapPtr)
@@ -155,6 +155,8 @@ bool ImageSonificationProcessor::isBusesLayoutSupported(const BusesLayout& layou
 
 void ImageSonificationProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
+    directionOfPixelByPixelPlay = static_cast<CrawlingDirection>(crawlingDirectionParam->load());
+
     juce::ScopedNoDenormals noDenormals;
     int totalNumInputChannels = getTotalNumInputChannels();
     int totalNumOutputChannels = getTotalNumOutputChannels();
@@ -179,7 +181,7 @@ void ImageSonificationProcessor::processBlock(juce::AudioBuffer<float>& buffer, 
 
     // Depending on chosen algorithm, generate new buffer of samples
     if (*algorithmParam == static_cast<float>(NoiseCrawler)) {
-        imageAsNoiseAlg.generate_next_samples(mono_signal, sample_len);
+        imageAsNoiseAlg.generateNextSamples(mono_signal, sample_len);
     }
 
     
