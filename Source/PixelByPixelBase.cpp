@@ -11,10 +11,11 @@
 #include "PixelByPixelBase.h"
 //#include <juce_MathsFunctions.h>
 
-#define FLOAT2RGB(f_val, div) ((unsigned char)((f_val / div)*255))
+#define ACC2RGB(acc_val, div) ((juce::uint8)(acc_val / div))
 
 PixelByPixelBase::PixelByPixelBase(CrawlingDirection& directionOfPlay, int& windowSize): AlgorithmBase(), directionOfPlay(directionOfPlay), WindowSize(windowSize), SampleRate(0u)
 {
+    // TODO - make windowSize type juce::uint8 and cut away slider at value 255!
 }
 
 void PixelByPixelBase::generateNextSamples(float* output_buffer, unsigned int buffer_length)
@@ -85,29 +86,34 @@ juce::Colour PixelByPixelBase::Window()
         return imageBitmapPtr->getPixelColour(WidthIt, HeightIt);
     }
 
-    unsigned int lower_bound_width = (WidthIt - WindowSize / 2 < 0) ? 0 : (WidthIt - WindowSize / 2);
-    unsigned int higher_bound_width = (WidthIt + WindowSize / 2 > imageBitmapPtr->width) ? imageBitmapPtr->width : (WidthIt + WindowSize / 2);
+    unsigned int half_win_size = WindowSize / 2;
 
-    unsigned int lower_bound_height = (HeightIt - WindowSize / 2 < 0) ? 0 : (HeightIt - WindowSize / 2);
-    unsigned int higher_bound_height = (HeightIt + WindowSize / 2 > imageBitmapPtr->height) ? imageBitmapPtr->height : (HeightIt + WindowSize / 2);
+    unsigned int lower_bound_width = std::max((WidthIt - half_win_size), 0u);
+    unsigned int higher_bound_width = std::min((unsigned int)(imageBitmapPtr->width), (WidthIt + half_win_size));
 
-    double R = 0.0;
-    double G = 0.0;
-    double B = 0.0;
+    unsigned int lower_bound_height = std::max((HeightIt - half_win_size), 0u);
+    unsigned int higher_bound_height = std::min((unsigned int)(imageBitmapPtr->height), (HeightIt + half_win_size));
 
-    unsigned int counter = 0;
+    // max window size is 255 (uint8), so accumulators can contain values up to 255*255*255 - uint32 is needed!
+    juce::uint32 R = 0u;
+    juce::uint32 G = 0u;
+    juce::uint32 B = 0u;
+
+    juce::Colour temp_colour;
 
     // TODO - cache correct part of the sample for the calculation of the next sample!
     for (unsigned int i = lower_bound_width; i < higher_bound_width; ++i)
     {
         for (unsigned int j = lower_bound_height; j < higher_bound_height; ++j)
         {
-            R += imageBitmapPtr->getPixelColour(i, j).getFloatRed();
-            G += imageBitmapPtr->getPixelColour(i, j).getFloatGreen();
-            B += imageBitmapPtr->getPixelColour(i, j).getFloatBlue();
-
-            counter++;
+            temp_colour = imageBitmapPtr->getPixelColour(i, j);
+            R += temp_colour.getRed();
+            G += temp_colour.getGreen();
+            B += temp_colour.getBlue();
         }
     }
-    return juce::Colour(FLOAT2RGB(R, counter), FLOAT2RGB(G, counter), FLOAT2RGB(B, counter));
+
+    unsigned int win_size = (higher_bound_width - lower_bound_width) * (higher_bound_height - lower_bound_height);
+
+    return juce::Colour(ACC2RGB(R, win_size), ACC2RGB(G, win_size), ACC2RGB(B, win_size));
 }
