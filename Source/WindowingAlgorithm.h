@@ -5,7 +5,7 @@
 //  Created by Karolina Płaneta on 15/12/2023.
 //
 #include <JuceHeader.h>
-#include "AlgorithmBase.h"
+#include "Algorithms/AlgorithmBase.h"
 #pragma once
 
 

@@ -11,8 +11,8 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "CommonTypeDefs.h"
-#include "AlgorithmBase.h"
+#include "..\..\CommonTypeDefs.h"
+#include "..\AlgorithmBase.h"
 
 
 class PixelByPixelBase: public AlgorithmBase {

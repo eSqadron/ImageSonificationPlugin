@@ -8,7 +8,7 @@
 
 
 #include <JuceHeader.h>
-#include "AlgorithmBase.h"
+#include "../AlgorithmBase.h"
 #pragma once
 
 

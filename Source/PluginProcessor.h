@@ -12,10 +12,10 @@
 
 #include "CommonTypeDefs.h"
 
-#include "ImageAsNoiseAlgorithm.h"
-#include "EECS351WN22algorithm.h"
+#include "Algorithms/PixelByPixel/ImageAsNoiseAlgorithm.h"
+#include "Algorithms/PixelByPixel/EECS351WN22algorithm.h"
 #include "WindowingAlgorithm.h"
-#include "LandscapeAlgorithm.h"
+#include "Algorithms/RowByRow/LandscapeAlgorithm.h"
 
 
 //==============================================================================
