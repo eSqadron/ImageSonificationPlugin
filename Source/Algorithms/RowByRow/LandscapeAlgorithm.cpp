@@ -7,61 +7,37 @@
 
 #include "landscapeAlgorithm.h"
 
-
-
-TerrainAlgorithm::TerrainAlgorithm(): AlgorithmBase()
+TerrainAlgorithm::TerrainAlgorithm(): RowByRowBase()
 {
 }
 
-void TerrainAlgorithm::generateNextSamples(float* output_buffer, unsigned int buffer_length)
-{      
-        unsigned int k = 0;
-        int height = imageBitmapPtr->height;
-        int width = imageBitmapPtr->width;
-        
-        
-        if(HeightIt == 0){
-            HeightIt = 1;
-        }
-        
-        while (true) {
-            for (; WidthIt < width; ++WidthIt) {
-                float maxDifference = 0;
-                int index = 0;
-                
-                
-                for (; HeightIt < height; ++HeightIt) {
-                    
-                    auto pix_c = imageBitmapPtr->getPixelColour(WidthIt, HeightIt);
-                    float pixelBrightness = (pix_c.getFloatRed() + pix_c.getFloatGreen() + pix_c.getFloatBlue()) / 3.f;
-                    
-                    auto previousPixel = imageBitmapPtr->getPixelColour(WidthIt, HeightIt-1);
-                    float previousPixelBrightness = (previousPixel.getFloatRed() + previousPixel.getFloatGreen() + previousPixel.getFloatBlue()) / 3.f;
-                    
-                    
-                    float difference = std::abs(pixelBrightness - previousPixelBrightness);
-                    
-                    if(difference > maxDifference){
-                        maxDifference = difference;
-                        index = HeightIt-1;
-                    }
-                    
-                }
-                HeightIt = 1;
-                
-                  imageBitmapPtr->setPixelColour(WidthIt, index, juce::Colour(255, 0, 0));
-        
-                
-                if( k < buffer_length){
-                    *(output_buffer + k) = float(index)/float(height);
-                    
-                    k++;
-                }
-                else{
-                    return;
-                }
-                
-            }
-            WidthIt = 0;
+
+float TerrainAlgorithm::getSampleFromRowOrCol()
+{
+    int height = imageBitmapPtr->height;
+
+    float maxDifference = 0;
+    int index = 0;
+
+    juce::Colour pixelRGB = imageBitmapPtr->getPixelColour(RowOrColIt, 0);
+    float previousPixelBrightness = (pixelRGB.getFloatRed() + pixelRGB.getFloatGreen() + pixelRGB.getFloatBlue()) / 3.f;
+
+    float pixelBrightness = 0.f;
+    float difference_diff = 0.f;
+
+    for (int height_it = 1; height_it < height; ++height_it) {
+
+        pixelRGB = imageBitmapPtr->getPixelColour(RowOrColIt, height_it);
+        pixelBrightness = (pixelRGB.getFloatRed() + pixelRGB.getFloatGreen() + pixelRGB.getFloatBlue()) / 3.f;
+
+        difference_diff = std::abs(pixelBrightness - previousPixelBrightness);
+        previousPixelBrightness = pixelBrightness;
+
+        if (difference_diff > maxDifference) {
+            maxDifference = difference_diff;
+            index = height_it - 1;
         }
     }
+    //imageBitmapPtr->setPixelColour(RowOrColIt, index, juce::Colour(255, 0, 0)); DEBUG ONLY
+    return (float)index / (float)height;
+}

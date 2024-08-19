@@ -5,6 +5,8 @@
 //  Created by Karolina Płaneta on 15/12/2023.
 //
 
+// TODO - To be rewritten into PixelByPixelBase
+
 #include <stdio.h>
 
 #include "WindowingAlgorithm.h"
@@ -88,3 +90,5 @@ void WindowingAlgorithm::generateNextSamples(float* output_buffer, unsigned int 
     }
 }
 
+int WindowingAlgorithm::WidthIt = 0;
+int WindowingAlgorithm::HeightIt = 0;

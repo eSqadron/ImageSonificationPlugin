@@ -33,6 +33,9 @@ protected:
 
     virtual void iteratePixelAlgorithmSpecific(juce::Colour) { }
 
+    static int WidthIt;
+    static int HeightIt;
+
 private:
     void iteratePixelCommon();
 

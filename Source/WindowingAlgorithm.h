@@ -4,6 +4,9 @@
 //
 //  Created by Karolina Płaneta on 15/12/2023.
 //
+
+// TODO - To be rewritten into PixelByPixelBase
+
 #include <JuceHeader.h>
 #include "Algorithms/AlgorithmBase.h"
 #pragma once
@@ -19,4 +22,6 @@ private:
 
     float calculateWindow(int windowSize, int currentHeight, int currentWidth, float previousSum);
 
+    static int WidthIt;
+    static int HeightIt;
 };

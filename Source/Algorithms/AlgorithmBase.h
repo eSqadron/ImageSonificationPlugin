@@ -16,7 +16,4 @@ public:
     virtual void generateNextSamples(float* output_buffer, unsigned int buffer_length) = 0;
 
     static juce::Image::BitmapData* imageBitmapPtr;
-
-    static int WidthIt;
-    static int HeightIt;
 };

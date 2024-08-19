@@ -9,12 +9,14 @@
 
 #include <JuceHeader.h>
 #include "../AlgorithmBase.h"
+#include "RowByRowBase.h"
 #pragma once
 
 
-class TerrainAlgorithm: public AlgorithmBase {
+class TerrainAlgorithm: public RowByRowBase {
 public:
     TerrainAlgorithm();
 
-    void generateNextSamples(float* output_buffer, unsigned int buffer_length) override;
+    float getSampleFromRowOrCol() override;
+
 };

@@ -12,5 +12,3 @@
 
 juce::Image::BitmapData* AlgorithmBase::imageBitmapPtr = nullptr;
 
-int AlgorithmBase::WidthIt = 0;
-int AlgorithmBase::HeightIt = 0;

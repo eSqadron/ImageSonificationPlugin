@@ -117,3 +117,6 @@ juce::Colour PixelByPixelBase::Window()
 
     return juce::Colour(ACC2RGB(R, win_size), ACC2RGB(G, win_size), ACC2RGB(B, win_size));
 }
+
+int PixelByPixelBase::WidthIt = 0;
+int PixelByPixelBase::HeightIt = 0;
