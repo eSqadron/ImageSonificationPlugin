@@ -13,7 +13,7 @@
 
 #define ACC2RGB(acc_val, div) ((juce::uint8)(acc_val / div))
 
-PixelByPixelBase::PixelByPixelBase(CrawlingDirection& directionOfPlay, int& windowSize): AlgorithmBase(), directionOfPlay(directionOfPlay), WindowSize(windowSize), SampleRate(0u)
+PixelByPixelBase::PixelByPixelBase(PixelByPixelDirection& directionOfPlay, int& windowSize): AlgorithmBase(), directionOfPlay(directionOfPlay), WindowSize(windowSize), SampleRate(0u)
 {
     // TODO - make windowSize type juce::uint8 and cut away slider at value 255!
 }

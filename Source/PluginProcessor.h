@@ -73,13 +73,13 @@ public:
     juce::Image image;
 
     std::atomic <float>* algorithmParam = nullptr;
-    std::atomic <float>* crawlingDirectionParam = nullptr;
+    std::atomic <float>* pixelByPixelDirectionParam = nullptr;
 
-    CrawlingDirection directionOfPixelByPixelPlay;
+    PixelByPixelDirection directionOfPixelByPixelPlay = static_cast<PixelByPixelDirection>(0);
 
     bool imageIsBeingLoaded = true;
     
-    int WindowSizeSliderValue = 1;
+    int WindowSizeSliderValue = 1; // TODO - make it juce::uint8
 
 private:
     juce::AudioProcessorValueTreeState parameters;
@@ -87,10 +87,10 @@ private:
     //
     ImageAsNoiseAlgorithm imageAsNoiseAlg;
     EECS351WN22algorithm eecs351wn22Alg;
-    WindowingAlgorithm windowingAlg;
+    //WindowingAlgorithm windowingAlg; OBSOLETE
     TerrainAlgorithm landscapeAlg;
 
-    std::array<AlgorithmBase*, 4> AlgorithmsArray;
+    std::array<AlgorithmBase*, IMEPLEMENTED_ALGORITHMS_COUNT> AlgorithmsArray;
 
 
 

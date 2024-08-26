@@ -14,7 +14,7 @@
 
 class EECS351WN22algorithm : public PixelByPixelBase {
 public:
-    EECS351WN22algorithm(CrawlingDirection& directionOfPlay, int& windowSize);
+    EECS351WN22algorithm(PixelByPixelDirection& directionOfPlay, int& windowSize);
 
     float getSampleFromPixel(juce::Colour pixel) override;
     void iteratePixelAlgorithmSpecific(juce::Colour pixel) override;

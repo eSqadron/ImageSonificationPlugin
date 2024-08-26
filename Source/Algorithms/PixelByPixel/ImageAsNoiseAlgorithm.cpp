@@ -10,7 +10,7 @@
 
 #include "ImageAsNoiseAlgorithm.h"
 
-ImageAsNoiseAlgorithm::ImageAsNoiseAlgorithm(CrawlingDirection& directionOfPlay, int& windowSize): PixelByPixelBase(directionOfPlay, windowSize)
+ImageAsNoiseAlgorithm::ImageAsNoiseAlgorithm(PixelByPixelDirection& directionOfPlay, int& windowSize): PixelByPixelBase(directionOfPlay, windowSize)
 {
 }
 

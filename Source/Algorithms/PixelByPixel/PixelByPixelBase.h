@@ -17,7 +17,7 @@
 
 class PixelByPixelBase: public AlgorithmBase {
 public:
-    PixelByPixelBase(CrawlingDirection& directionOfPlay, int& windowSize);
+    PixelByPixelBase(PixelByPixelDirection& directionOfPlay, int& windowSize);
 
     void generateNextSamples(float* output_buffer, unsigned int buffer_length) override;
 
@@ -44,5 +44,5 @@ private:
     virtual float getSampleFromPixel(juce::Colour pixel) = 0;
 
 
-    CrawlingDirection& directionOfPlay;
+    PixelByPixelDirection& directionOfPlay;
 };

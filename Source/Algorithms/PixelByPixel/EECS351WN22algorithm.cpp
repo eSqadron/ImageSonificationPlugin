@@ -11,7 +11,7 @@
 #include "EECS351WN22algorithm.h"
 
 
-EECS351WN22algorithm::EECS351WN22algorithm(CrawlingDirection& directionOfPlay, int& windowSize) : PixelByPixelBase(directionOfPlay, windowSize)
+EECS351WN22algorithm::EECS351WN22algorithm(PixelByPixelDirection& directionOfPlay, int& windowSize) : PixelByPixelBase(directionOfPlay, windowSize)
 {
     SamplesPerPixel = 1500;
 }

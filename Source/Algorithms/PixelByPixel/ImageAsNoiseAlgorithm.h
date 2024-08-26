@@ -15,7 +15,7 @@
 
 class ImageAsNoiseAlgorithm: public PixelByPixelBase {
 public:
-    ImageAsNoiseAlgorithm(CrawlingDirection& directionOfPlay, int& windowSize);
+    ImageAsNoiseAlgorithm(PixelByPixelDirection& directionOfPlay, int& windowSize);
 
     float getSampleFromPixel(juce::Colour pixel) override;
 };

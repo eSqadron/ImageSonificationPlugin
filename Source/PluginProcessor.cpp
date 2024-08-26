@@ -27,28 +27,34 @@ ImageSonificationProcessor::ImageSonificationProcessor()
                                                          0,              // minimum value
                                                          100,              // maximum value
                                                          0),            // default value
-            std::make_unique<juce::AudioParameterInt>("crawling_direction",            // parameterID
-                                                         "CrawlingDirectionButtonId",            // parameter name
+            std::make_unique<juce::AudioParameterInt>("pixelByPixel_direction",            // parameterID
+                                                         "PixelByPixelDirectionButtonId",            // parameter name
                                                          0,              // minimum value
                                                          100,              // maximum value
                                                          0)            // default value
         }),
+    // Initialize algorithms
     imageAsNoiseAlg(directionOfPixelByPixelPlay, WindowSizeSliderValue),
     eecs351wn22Alg(directionOfPixelByPixelPlay, WindowSizeSliderValue),
-    windowingAlg(WindowSizeSliderValue),
+    // windowingAlg(WindowSizeSliderValue), OBSOLETE
     landscapeAlg()
 
 #endif
 {
     AlgorithmBase::imageBitmapPtr = nullptr;
+
+    // TODO - maybe actually use this logger
     m_flogger = std::unique_ptr<juce::FileLogger>(juce::FileLogger::createDateStampedLogger("Juce", "visualiser", ".txt", "Welcome to plugin"));
 
+    // DAW parameters
+    // TODO - make them actually save values!
     algorithmParam = parameters.getRawParameterValue("algorithm");
-    crawlingDirectionParam = parameters.getRawParameterValue("crawling_direction");
+    pixelByPixelDirectionParam = parameters.getRawParameterValue("pixelByPixel_direction");
 
+    // TODO - maybe it is possible to immediately initialize array of objects, instead of creating array of pointers to objects?
     AlgorithmsArray[NoiseCrawler] = &imageAsNoiseAlg;
     AlgorithmsArray[SineChordCrawler] = &eecs351wn22Alg;
-    AlgorithmsArray[Windowing] = &windowingAlg;
+    // AlgorithmsArray[Windowing] = &windowingAlg; OBSOLETE
     AlgorithmsArray[Landscape] = &landscapeAlg;
 }
 
@@ -122,6 +128,7 @@ void ImageSonificationProcessor::changeProgramName(int, const juce::String&)
 //==============================================================================
 void ImageSonificationProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
+    // Call prepare to play on all agarithms that implement it!
     this->eecs351wn22Alg.prepareToPlay(sampleRate, samplesPerBlock);
 }
 
@@ -157,27 +164,19 @@ bool ImageSonificationProcessor::isBusesLayoutSupported(const BusesLayout& layou
 }
 #endif
 
-
+// This function will be called in a loop, to process audio in real time!
+// It will be called sample_rate/buffer_size times a second - both values defined in DAWs!
+// where buffer size is amount of samples processed during one function call.
 void ImageSonificationProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&)
 {
-    directionOfPixelByPixelPlay = static_cast<CrawlingDirection>(crawlingDirectionParam->load());
-
-    juce::ScopedNoDenormals noDenormals;
-    int totalNumInputChannels = getTotalNumInputChannels();
     int totalNumOutputChannels = getTotalNumOutputChannels();
     int sample_len = buffer.getNumSamples();
 
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    // This is here to avoid people getting screaming feedback
-    // when they first compile a plugin, but obviously you don't need to keep
-    // this code if your algorithm always overwrites all the output channels.
-    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear(i, 0, buffer.getNumSamples());
-
-    // Do NOT play anythong when image is~not loaded or being loaded!
+    // Do NOT play anything when image is not loaded or being loaded!
     if (AlgorithmBase::imageBitmapPtr == nullptr || imageIsBeingLoaded) {
+        // Clear all channels:
+        for (auto i = 0; i < totalNumOutputChannels; ++i)
+            buffer.clear(i, 0, buffer.getNumSamples());
         return;
     }
 
@@ -189,14 +188,15 @@ void ImageSonificationProcessor::processBlock(juce::AudioBuffer<float>& buffer, 
     // sample_len - amount of samples to generate
     AlgorithmsArray[static_cast<int>(*algorithmParam)]->generateNextSamples(mono_signal, sample_len);
 
-    // rewrite mono signal into all (both) channels
-    for (int channel = 0; channel < totalNumInputChannels; ++channel) {
-        auto* channelData = buffer.getWritePointer(channel);
+    // rewrite mono signal into all (usually both - stereo) channels
+    for (int channel = 0; channel < totalNumOutputChannels; ++channel) {
+        float* channelBufferPtr = buffer.getWritePointer(channel);
         for (int i = 0; i < sample_len; ++i) {
-            channelData[i] = mono_signal[i];
+            channelBufferPtr[i] = mono_signal[i];
         }
-        
     }
+
+    delete[] mono_signal;
 }
 
 //==============================================================================
