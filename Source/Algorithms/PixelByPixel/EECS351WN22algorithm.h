@@ -21,8 +21,8 @@ public:
 
 private:
     short unsigned int chords[3] = { 36, 40, 43 };
-    double angleDelta[3] = { 0, 0, 0 };
-    double currentAngle[3] = { 0, 0, 0 };
+    float angleDelta[3] = { 0, 0, 0 };
+    float currentAngle[3] = { 0, 0, 0 };
 
     short unsigned int EECS_limit = 35;
 };
