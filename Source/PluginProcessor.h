@@ -9,10 +9,13 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "ImageAsNoiseAlgorithm.h"
-#include "EECS351WN22algorithm.h"
+
+#include "CommonTypeDefs.h"
+
+#include "Algorithms/PixelByPixel/ImageAsNoiseAlgorithm.h"
+#include "Algorithms/PixelByPixel/EECS351WN22algorithm.h"
 #include "WindowingAlgorithm.h"
-#include "LandscapeAlgorithm.h"
+#include "Algorithms/RowByRow/LandscapeAlgorithm.h"
 
 
 //==============================================================================
@@ -67,27 +70,27 @@ public:
 
     std::unique_ptr<juce::FileLogger> m_flogger;
 
-    std::shared_ptr<juce::Image::BitmapData> imageBitmapPtr;
     juce::Image image;
 
     std::atomic <float>* algorithmParam = nullptr;
-    std::atomic <float>* crawlingDirectionParam = nullptr;
+    std::atomic <float>* pixelByPixelDirectionParam = nullptr;
+
+    PixelByPixelDirection directionOfPixelByPixelPlay = static_cast<PixelByPixelDirection>(0);
 
     bool imageIsBeingLoaded = true;
     
-    int valueOfSlider = 1;
+    int WindowSizeSliderValue = 1; // TODO - make it juce::uint8
 
 private:
     juce::AudioProcessorValueTreeState parameters;
 
-    unsigned int widthIt = 0;
-    unsigned int heightIt = 0;
-
     //
     ImageAsNoiseAlgorithm imageAsNoiseAlg;
     EECS351WN22algorithm eecs351wn22Alg;
-    WindowingAlgorithm windowingAlg;
+    //WindowingAlgorithm windowingAlg; OBSOLETE
     TerrainAlgorithm landscapeAlg;
+
+    std::array<AlgorithmBase*, IMEPLEMENTED_ALGORITHMS_COUNT> AlgorithmsArray;
 
 
 

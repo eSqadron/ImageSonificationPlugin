@@ -6,18 +6,32 @@
   <MAINGROUP id="tIElxY" name="ImageSonificationPlugin">
     <GROUP id="{FD711F5C-72BD-F3A2-E139-1339E676D35A}" name="Source">
       <GROUP id="{76012BD6-BCB9-B2DF-3807-C613F131C857}" name="Algorithms">
-        <FILE id="BL7Zxc" name="EECS351WN22algorithm.cpp" compile="1" resource="0"
-              file="Source/EECS351WN22algorithm.cpp"/>
-        <FILE id="ctuvXT" name="EECS351WN22algorithm.h" compile="0" resource="0"
-              file="Source/EECS351WN22algorithm.h"/>
-        <FILE id="wEzKu7" name="ImageAsNoiseAlgorithm.cpp" compile="1" resource="0"
-              file="Source/ImageAsNoiseAlgorithm.cpp"/>
-        <FILE id="zgzE9K" name="ImageAsNoiseAlgorithm.h" compile="0" resource="0"
-              file="Source/ImageAsNoiseAlgorithm.h"/>
-        <FILE id="muccrV" name="LandscapeAlgorithm.cpp" compile="1" resource="0"
-              file="Source/LandscapeAlgorithm.cpp"/>
-        <FILE id="xaCWo3" name="LandscapeAlgorithm.h" compile="0" resource="0"
-              file="Source/LandscapeAlgorithm.h"/>
+        <FILE id="jjLfdO" name="AlgorithmBase.cpp" compile="1" resource="0"
+              file="Source/Algorithms/AlgorithmBase.cpp"/>
+        <FILE id="eVR5Kb" name="AlgorithmBase.h" compile="0" resource="0" file="Source/Algorithms/AlgorithmBase.h"/>
+        <GROUP id="{12D3855B-4AB5-C682-3743-106E483C1ACF}" name="RowByRow">
+          <FILE id="Hl8zXS" name="LandscapeAlgorithm.cpp" compile="1" resource="0"
+                file="Source/Algorithms/RowByRow/LandscapeAlgorithm.cpp"/>
+          <FILE id="NCXwPJ" name="LandscapeAlgorithm.h" compile="0" resource="0"
+                file="Source/Algorithms/RowByRow/LandscapeAlgorithm.h"/>
+          <FILE id="VLpdUY" name="RowByRowBase.cpp" compile="1" resource="0"
+                file="Source/Algorithms/RowByRow/RowByRowBase.cpp"/>
+          <FILE id="QQeQob" name="RowByRowBase.h" compile="0" resource="0" file="Source/Algorithms/RowByRow/RowByRowBase.h"/>
+        </GROUP>
+        <GROUP id="{B67AF9CF-4A1C-E278-A6E7-E581442EE855}" name="PixelByPixel">
+          <FILE id="fvp6Vp" name="EECS351WN22algorithm.cpp" compile="1" resource="0"
+                file="Source/Algorithms/PixelByPixel/EECS351WN22algorithm.cpp"/>
+          <FILE id="c4ihBN" name="EECS351WN22algorithm.h" compile="0" resource="0"
+                file="Source/Algorithms/PixelByPixel/EECS351WN22algorithm.h"/>
+          <FILE id="hIzmG1" name="ImageAsNoiseAlgorithm.cpp" compile="1" resource="0"
+                file="Source/Algorithms/PixelByPixel/ImageAsNoiseAlgorithm.cpp"/>
+          <FILE id="X2Z30C" name="ImageAsNoiseAlgorithm.h" compile="0" resource="0"
+                file="Source/Algorithms/PixelByPixel/ImageAsNoiseAlgorithm.h"/>
+          <FILE id="VfFBf4" name="PixelByPixelBase.cpp" compile="1" resource="0"
+                file="Source/Algorithms/PixelByPixel/PixelByPixelBase.cpp"/>
+          <FILE id="y4ZNh5" name="PixelByPixelBase.h" compile="0" resource="0"
+                file="Source/Algorithms/PixelByPixel/PixelByPixelBase.h"/>
+        </GROUP>
         <FILE id="SpPVP5" name="WindowingAlgorithm.cpp" compile="1" resource="0"
               file="Source/WindowingAlgorithm.cpp"/>
         <FILE id="mLfhNE" name="WindowingAlgorithm.h" compile="0" resource="0"

@@ -6,12 +6,12 @@
   ==============================================================================
 */
 
-#pragma once
+
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "CommonTypeDefs.h"
-
+#pragma once
 
 template <typename T>
 struct ToggleButtonInfo {
@@ -59,7 +59,7 @@ private:
 
     juce::ToggleButton noiseToggle;
     juce::ToggleButton toggleEECS;
-    juce::ToggleButton windowToggle;
+    //juce::ToggleButton windowToggle;
     juce::ToggleButton terrainToggle;
 
 
@@ -68,16 +68,16 @@ private:
     juce::ToggleButton Crawl2Toggle;
     juce::ToggleButton Crawl3Toggle;
 
-    ToggleButtonInfo<enum CrawlingDirection> crawl_direction_buttons[3] = {
+    ToggleButtonInfo<enum PixelByPixelDirection> PixelByPixelDirectionsButtons[3] = {
         { "From left to right", LeftToRight, &Crawl1Toggle},
         { "From up to down", UpToDown, &Crawl2Toggle},
         { "random", Random, &Crawl3Toggle}
     };
 
-    ToggleButtonInfo<enum SythesiserAlgorithm> buttons[4] = {
+    ToggleButtonInfo<enum SythesiserAlgorithm> AlgorithmsButtons[IMEPLEMENTED_ALGORITHMS_COUNT] = {
         { "Image as noise", NoiseCrawler, &noiseToggle},
         { "EECS 351 WN22", SineChordCrawler, &toggleEECS},
-        { "WINDOWING", Windowing, &windowToggle},
+        //{ "Windowing obsolete", Windowing, &windowToggle},
         { "Landscape algorithm", Landscape, &terrainToggle}
     };
     
